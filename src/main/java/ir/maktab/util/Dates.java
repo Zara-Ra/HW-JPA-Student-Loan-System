@@ -46,6 +46,7 @@ public class Dates {
     public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, DegreeType degreeType){
         long daysBetween = Math.abs(numberOfDaysBetween(firstDate, secondDate));
         int graduate = degreeType.graduateYears;
-        return true;
+        long graduationInDays = graduate * 365;
+        return graduationInDays > daysBetween;
     }
 }
