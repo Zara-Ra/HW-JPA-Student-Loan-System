@@ -4,9 +4,7 @@ import ir.maktab.data.entity.Payment;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,16 +17,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Student extends Person implements Serializable {
-    @Embedded
+    @OneToOne
     AccountInfo accountInfo;
-    @Embedded
-    StudentUniversityInfo universityInfo;
+    @OneToOne
+    UniversityInfo universityInfo;
 
-    @OneToMany(mappedBy = "student")
-
+    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)
     List<Payment> paymentList = new ArrayList<>();
 
-    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, String address, String houseContractNum, AccountInfo accountInfo, StudentUniversityInfo universityInfo) {
+    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, String address, String houseContractNum, AccountInfo accountInfo, UniversityInfo universityInfo) {
         super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm, address, houseContractNum);
         this.accountInfo = accountInfo;
         this.universityInfo = universityInfo;

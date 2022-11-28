@@ -12,6 +12,10 @@ public enum DegreeType {
     DegreeType(int graduateYears){
         this.graduateYears = graduateYears;
     }
+
+    public int getGraduationInDays() {
+        return this.graduateYears*365;
+    }
     public DegreeGroup toDegreeGroup() {
         return switch (this) {
             case ASSOCIATE_DEGREE, BACHELOR -> DegreeGroup.GROUP1;

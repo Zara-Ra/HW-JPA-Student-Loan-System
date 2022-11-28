@@ -5,6 +5,7 @@ import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.enums.DegreeType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class Payment {
 
     @EqualsAndHashCode.Exclude
     @Temporal(value = TemporalType.DATE)
+    @CreationTimestamp
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
