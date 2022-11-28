@@ -3,6 +3,7 @@ package ir.maktab.repository;
 import ir.maktab.data.entity.user.Student;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
@@ -61,14 +62,18 @@ public class StudentRepo {
     }
 
     public Optional<Student> getByUserNameAndPassword(String username, String password) {
-        EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
-        em.getTransaction().begin();//TODo is this . . . correct???
-        Query query = em.createQuery("from Student s where s.accountInfo.username =:username and s.accountInfo.password =:password");
-        query.setParameter("username", username);
-        query.setParameter("password", password);
-        Student person = (Student) query.getSingleResult();
-        em.getTransaction().commit();
-        em.close();
+        Student person=null;
+        try {
+            EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
+            em.getTransaction().begin();
+            Query query = em.createQuery("from Student s where s.accountInfo.username =:username and s.accountInfo.password =:password");
+            query.setParameter("username", username);
+            query.setParameter("password", password);
+            person = (Student) query.getSingleResult();
+            em.getTransaction().commit();
+            em.close();
+        }catch (NoResultException e){
+        }
         return Optional.ofNullable(person);
     }
 }

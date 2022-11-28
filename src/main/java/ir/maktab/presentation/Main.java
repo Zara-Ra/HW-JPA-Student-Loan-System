@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         //new StudentLoanSystem().FirstMenu();
 
-        /*StudentRepo studentRepo = StudentRepo.getInstance();
+        StudentRepo studentRepo = StudentRepo.getInstance();
         LoanRepo loanRepo = LoanRepo.getInstance();
 
         AccountInfo accountInfo = new AccountInfo("zara", "12345678");
@@ -30,14 +30,14 @@ public class Main {
         Date birth = toDate(localDate);
 
         Student student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
-                , "1222", "088021", birth, false, null
+                , "1222", "088021", birth, true,false, null
                 , null, accountInfo, universityInfo);
         studentRepo.save(student);
 
         Loan loan = new EducationLoan(null, RepayType.EACH_SEMESTER, 12000d, null, DegreeGroup.GROUP1);
         loanRepo.save(loan);
-*/
-        StudentService.getInstance().signIn("zara","12345678");
+
+        StudentService.getInstance().signIn("sara","12345678");
 
     }
 
