@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @IdClass(PaymentId.class)
@@ -26,16 +27,25 @@ public class Payment {
     @ManyToOne
     Loan loan;
 
+    @EqualsAndHashCode.Exclude
     @Temporal(value = TemporalType.DATE)
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     DegreeType degreeType;
+    @EqualsAndHashCode.Exclude
     @OneToOne
     CreditCard creditCard;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "payment")
     List<Repayment> repaymentList = new ArrayList<>();
+
+    public Payment(Student student, Loan loan, DegreeType degreeType) {
+        this.student = student;
+        this.loan = loan;
+        this.degreeType = degreeType;
+    }
 
     @Override
     public String toString() {

@@ -15,6 +15,7 @@ import java.util.List;
 @DiscriminatorValue(value = "EDUCATION")
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -25,6 +26,11 @@ public class EducationLoan extends Loan {
 
     public EducationLoan(Long id, RepayType repayType, double amount, List<Payment> paymentList, DegreeGroup degreeGroup) {
         super(id, repayType, amount, paymentList);
+        this.degreeGroup = degreeGroup;
+    }
+
+    public EducationLoan(RepayType repayType, DegreeGroup degreeGroup) {
+        super(repayType);
         this.degreeGroup = degreeGroup;
     }
 }

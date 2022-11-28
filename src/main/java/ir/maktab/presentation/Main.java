@@ -9,11 +9,11 @@ import ir.maktab.data.enums.*;
 import ir.maktab.repository.LoanRepo;
 import ir.maktab.repository.StudentRepo;
 import ir.maktab.service.StudentService;
+import ir.maktab.util.Dates;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,7 +27,7 @@ public class Main {
                 , UniversityType.PUBLIC_DAILY, 2016, DegreeType.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(2022, 10, 24, 0, 0);
-        Date birth = toDate(localDate);
+        Date birth = Dates.localDateTimeToDate(localDate);
 
         Student student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
                 , "1222", "088021", birth, true,false, null
@@ -37,12 +37,9 @@ public class Main {
         Loan loan = new EducationLoan(null, RepayType.EACH_SEMESTER, 12000d, null, DegreeGroup.GROUP1);
         loanRepo.save(loan);
 
-        StudentService.getInstance().signIn("sara","12345678");
+        Optional<Student> sara = StudentService.getInstance().signIn("sara", "12345678");
+        sara.ifPresent(System.out::println);
 
     }
 
-    public static Date toDate(LocalDateTime localDateTime) {
-        ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
-        return Date.from(zdt.toInstant());
-    }
 }

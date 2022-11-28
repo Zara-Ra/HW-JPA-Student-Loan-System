@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "loan_type", discriminatorType = DiscriminatorType.STRING)
 @Entity
@@ -27,6 +28,7 @@ public class Loan implements Serializable {
     @Enumerated(value = EnumType.STRING)
     LoanType loanType;
     */
+    @EqualsAndHashCode.Include
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     RepayType repayType;
@@ -35,4 +37,8 @@ public class Loan implements Serializable {
     @ToString.Exclude
     @OneToMany(mappedBy = "loan")
     List<Payment> paymentList = new ArrayList<>();
+
+    public Loan(RepayType repayType) {
+        this.repayType=repayType;
+    }
 }

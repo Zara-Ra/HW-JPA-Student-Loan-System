@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+////equalhash
 public class TuitionLoan extends Loan {
     @Enumerated(value = EnumType.STRING)
     DegreeGroup degreeGroup;
