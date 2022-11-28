@@ -35,6 +35,8 @@ public class Person {   //personal info
     Date birthdate;
 
     @EqualsAndHashCode.Exclude
+    boolean isMarried;
+    @EqualsAndHashCode.Exclude
     boolean liveInDorm;
     @EqualsAndHashCode.Exclude
     String address;

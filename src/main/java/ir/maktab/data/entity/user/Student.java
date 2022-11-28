@@ -27,8 +27,8 @@ public class Student extends Person implements Serializable {
     @OneToMany(mappedBy = "student")
     List<Payment> paymentList = new ArrayList<>();
 
-    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean liveInDorm, String address, String houseContractNum, AccountInfo accountInfo, StudentUniversityInfo universityInfo) {
-        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, liveInDorm, address, houseContractNum);
+    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, String address, String houseContractNum, AccountInfo accountInfo, StudentUniversityInfo universityInfo) {
+        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm, address, houseContractNum);
         this.accountInfo = accountInfo;
         this.universityInfo = universityInfo;
     }

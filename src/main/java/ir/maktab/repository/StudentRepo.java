@@ -5,6 +5,7 @@ import ir.maktab.data.entity.user.Student;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 public class StudentRepo {
     private static final StudentRepo studentRepo = new StudentRepo();
@@ -59,7 +60,7 @@ public class StudentRepo {
         return person;
     }
 
-    public Student getByUserNameAndPassword(String username, String password) {
+    public Optional<Student> getByUserNameAndPassword(String username, String password) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();//TODo is this . . . correct???
         Query query = em.createQuery("from Student s where s.accountInfo.username =:username and s.accountInfo.password =:password");
@@ -68,6 +69,6 @@ public class StudentRepo {
         Student person = (Student) query.getSingleResult();
         em.getTransaction().commit();
         em.close();
-        return person;
+        return Optional.ofNullable(person);
     }
 }

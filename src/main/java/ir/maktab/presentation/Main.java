@@ -8,6 +8,7 @@ import ir.maktab.data.entity.user.StudentUniversityInfo;
 import ir.maktab.data.enums.*;
 import ir.maktab.repository.LoanRepo;
 import ir.maktab.repository.StudentRepo;
+import ir.maktab.service.StudentService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,7 +17,9 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
-        StudentRepo studentRepo = StudentRepo.getInstance();
+        //new StudentLoanSystem().FirstMenu();
+
+        /*StudentRepo studentRepo = StudentRepo.getInstance();
         LoanRepo loanRepo = LoanRepo.getInstance();
 
         AccountInfo accountInfo = new AccountInfo("zara", "12345678");
@@ -33,6 +36,8 @@ public class Main {
 
         Loan loan = new EducationLoan(null, RepayType.EACH_SEMESTER, 12000d, null, DegreeGroup.GROUP1);
         loanRepo.save(loan);
+*/
+        StudentService.getInstance().signIn("zara","12345678");
 
     }
 
