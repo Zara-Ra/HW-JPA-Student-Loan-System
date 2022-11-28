@@ -21,8 +21,7 @@ public class Main {
 
         AccountInfo accountInfo = new AccountInfo("zara", "12345678");
         StudentUniversityInfo universityInfo = new StudentUniversityInfo("810185193", "Tehran"
-                , UniversityType.PUBLIC
-                , PublicUniversityType.DAY_TIME, 2016, DegreeType.BACHELOR);
+                , UniversityType.PUBLIC_DAILY, 2016, DegreeType.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(2022, 10, 24, 0, 0);
         Date birth = toDate(localDate);
