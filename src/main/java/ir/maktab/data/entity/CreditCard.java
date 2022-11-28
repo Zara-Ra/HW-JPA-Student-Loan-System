@@ -17,6 +17,7 @@ import java.util.Date;
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
     Long id;
     @Column(length = 16)
     String cardNum;
