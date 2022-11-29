@@ -33,4 +33,9 @@ public class EducationLoan extends Loan {
         super(repayType);
         this.degreeGroup = degreeGroup;
     }
+
+    public EducationLoan(RepayType repayType, double amount, DegreeGroup degreeGroup) {
+        super(repayType, amount);
+        this.degreeGroup = degreeGroup;
+    }
 }

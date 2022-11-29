@@ -28,4 +28,9 @@ public class HousingLoan extends Loan {
         super(id, repayType, amount, paymentList);
         this.cityType = cityType;
     }
+
+    public HousingLoan(RepayType repayType, double amount, CityType cityType) {
+        super(repayType, amount);
+        this.cityType = cityType;
+    }
 }

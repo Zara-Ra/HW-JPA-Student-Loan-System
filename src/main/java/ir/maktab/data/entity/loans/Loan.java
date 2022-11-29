@@ -41,4 +41,9 @@ public class Loan implements Serializable {
     public Loan(RepayType repayType) {
         this.repayType=repayType;
     }
+
+    public Loan(RepayType repayType, double amount) {
+        this.repayType = repayType;
+        this.amount = amount;
+    }
 }
