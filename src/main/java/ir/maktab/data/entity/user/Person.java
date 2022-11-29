@@ -26,9 +26,9 @@ public class Person {   //personal info
     String mothersName;
     @Column(nullable = false)
     String fathersName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String birthCertificateNum;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String nationalNum;
     @Column(nullable = false)
     @Temporal(value = TemporalType.DATE)

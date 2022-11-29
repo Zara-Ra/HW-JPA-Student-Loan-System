@@ -17,7 +17,7 @@ public class UniversityInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String studentNum;
     @Column(nullable = false)
     String universityName;
