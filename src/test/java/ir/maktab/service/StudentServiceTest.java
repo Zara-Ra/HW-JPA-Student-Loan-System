@@ -33,5 +33,6 @@ public class StudentServiceTest {
                 , null, accountInfo, universityInfo);
 
         studentService.singUp(student);
+
     }
 }
