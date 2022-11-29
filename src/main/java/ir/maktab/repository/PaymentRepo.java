@@ -21,7 +21,7 @@ public class PaymentRepo {
     public void save(Payment payment) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        em.persist(payment);
+        em.merge(payment);
         em.getTransaction().commit();
         em.close();
     }

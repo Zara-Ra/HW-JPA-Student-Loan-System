@@ -1,5 +1,6 @@
 package ir.maktab.presentation;
 
+import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.loans.EducationLoan;
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.user.AccountInfo;
@@ -10,6 +11,7 @@ import ir.maktab.repository.AccountInfoRepo;
 import ir.maktab.repository.LoanRepo;
 import ir.maktab.repository.StudentRepo;
 import ir.maktab.service.LoanService;
+import ir.maktab.service.PaymentService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.Dates;
 
@@ -23,6 +25,7 @@ public class Main {
 
         LoanService loanService = LoanService.getInstance();
         StudentService studentService = StudentService.getInstance();
+        PaymentService paymentService = PaymentService.getInstance();
 
         AccountInfo accountInfo = new AccountInfo(null,"zara", "12345678");
         UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "Tehran"
@@ -40,6 +43,9 @@ public class Main {
 
         Optional<Student> sara = StudentService.getInstance().signIn("zara", "12345678");
         sara.ifPresent(System.out::println);
+
+        Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+        paymentService.registerPayment(payment);
 
     }
 

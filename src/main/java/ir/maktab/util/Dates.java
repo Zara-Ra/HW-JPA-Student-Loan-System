@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class Dates {
-    private static final int A_WEEK = 7;
+    private static final int DAYS_OF_WEEK = 7;
     private static final LocalDateTime FIRST_RANGE_START = LocalDateTime.of(2022, 10, 23, 0, 0);
     private static final LocalDateTime FIRST_RANGE_END = LocalDateTime.of(2022, 10, 29, 23, 59);
 
@@ -40,7 +40,7 @@ public class Dates {
 
     public static boolean areDatesInSameSemester(Date firstDate, Date secondDate) {
         long daysBetween = Math.abs(numberOfDaysBetween(firstDate, secondDate));
-        return daysBetween < A_WEEK;
+        return daysBetween < DAYS_OF_WEEK;
     }
 
     public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, DegreeType degreeType){
