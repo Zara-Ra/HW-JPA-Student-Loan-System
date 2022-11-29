@@ -13,10 +13,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentServiceTest {
     private static final StudentService studentService = StudentService.getInstance();
+    private Student student;
     @Order(1)
     @Test
     public void signUpTest(){
@@ -28,11 +32,16 @@ public class StudentServiceTest {
         LocalDateTime localDate = LocalDateTime.of(1988, 2, 26, 0, 0);
         Date birth = Dates.localDateTimeToDate(localDate);
 
-        Student student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
+        student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
                 , "34123", "0080343453", birth, true,false, null
                 , null, accountInfo, universityInfo);
 
-        studentService.singUp(student);
-
+        //studentService.singUp(student);
+    }
+    @Order(2)
+    @Test
+    public void signInTest(){
+        Optional<Student> optionalStudent = studentService.signIn("zara", "12345678");
+        assertTrue(optionalStudent.isPresent());
     }
 }
