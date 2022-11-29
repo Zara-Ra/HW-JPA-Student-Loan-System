@@ -17,9 +17,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Student extends Person implements Serializable {
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     AccountInfo accountInfo;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     UniversityInfo universityInfo;
 
     @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)

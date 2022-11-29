@@ -6,8 +6,10 @@ import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.*;
+import ir.maktab.repository.AccountInfoRepo;
 import ir.maktab.repository.LoanRepo;
 import ir.maktab.repository.StudentRepo;
+import ir.maktab.service.LoanService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.Dates;
 
@@ -19,8 +21,8 @@ public class Main {
     public static void main(String[] args) {
         //new StudentLoanSystem().FirstMenu();
 
-        StudentRepo studentRepo = StudentRepo.getInstance();
-        LoanRepo loanRepo = LoanRepo.getInstance();
+        LoanService loanService = LoanService.getInstance();
+        StudentService studentService = StudentService.getInstance();
 
         AccountInfo accountInfo = new AccountInfo(null,"zara", "12345678");
         UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "Tehran"
@@ -31,10 +33,10 @@ public class Main {
         Student student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
                 , "1222", "088021", birth, true,false, null
                 , null, accountInfo, universityInfo);
-        studentRepo.save(student);
+        studentService.singUp(student);
 
         Loan loan = new EducationLoan(null, RepayType.EACH_SEMESTER, 12000d, null, DegreeGroup.GROUP1);
-        loanRepo.save(loan);
+        loanService.addLoan(loan);
 
         Optional<Student> sara = StudentService.getInstance().signIn("zara", "12345678");
         sara.ifPresent(System.out::println);
