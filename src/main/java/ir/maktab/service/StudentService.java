@@ -6,6 +6,7 @@ import ir.maktab.data.enums.RepayType;
 import ir.maktab.repository.StudentRepo;
 import ir.maktab.util.date.DateUtil;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -34,8 +35,8 @@ public class StudentService {
         boolean flag = false;
         if (i != -1) {
             Payment previousPayment = student.getPaymentList().get(i);
-            Date previousPaidDate = previousPayment.getPaidDate();                          //todo "if" not tested
-            Date now = new Date();
+            Date previousPaidDate = previousPayment.getPaidDate();
+            Date now = DateUtil.localDateTimeToDate(LocalDateTime.now());
             RepayType repayType = payment.getLoan().getRepayType();
             switch (repayType) {
                 case EACH_SEMESTER -> flag = DateUtil.areDatesInSameSemester(previousPaidDate, now);

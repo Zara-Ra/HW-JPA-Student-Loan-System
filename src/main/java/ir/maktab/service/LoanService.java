@@ -24,7 +24,7 @@ public class LoanService {
         loanRepo.save(loan);
     }
     public EducationLoan getEducationLoan(DegreeGroup degreeGroup){
-        return loanRepo.getEducationLoanByDegree(degreeGroup.name());
+        return loanRepo.getEducationLoanByDegree(degreeGroup);
     }
     public TuitionLoan getTuitionLoan(DegreeGroup degreeGroup){
         return loanRepo.getTuitionLoanByDegree(degreeGroup.name());

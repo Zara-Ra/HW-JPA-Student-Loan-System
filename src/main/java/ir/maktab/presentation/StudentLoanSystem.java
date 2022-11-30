@@ -13,6 +13,7 @@ import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.RepayType;
 import ir.maktab.data.enums.UniversityType;
+import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.date.DateUtil;
@@ -33,11 +34,9 @@ public class StudentLoanSystem {
     private final Scanner scanner = new Scanner(System.in);
     private static final String DIVIDER = "---------------------------------------------";
 
-    private static final Date VALID_DATE_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
-    private static final Date VALID_DATE_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
-    private static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
     public static final StudentService studentService = StudentService.getInstance();
     public static final PaymentService paymentService = PaymentService.getInstance();
+    public static final LoanService loanService = LoanService.getInstance();
     private Student student;
 
     public void firstMenu() {
@@ -202,8 +201,8 @@ public class StudentLoanSystem {
     }
 
     public void registerForLoan() {
-        //checkRegistrationDate(TODAY_DATE);
-        paymentService.checkRegistrationDate(VALID_DATE_1);
+        //paymentService.checkRegistrationDate(TODAY_DATE);
+        paymentService.checkRegistrationDate(DateUtil.ASSUMED_TODAY_1);
         System.out.println("Press 1 --> Education Loan");
         System.out.println("Press 2 --> Tuition Loan");
         System.out.println("Press 3 --> Housing Loan ");
@@ -217,25 +216,24 @@ public class StudentLoanSystem {
             choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
                 case 1 -> {
-                    loan = new EducationLoan(RepayType.EACH_SEMESTER, student.getUniversityInfo().getDegree().toDegreeGroup());
-
+                    loan = loanService.getEducationLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
                 }
                 case 2 -> {
-                    loan = new TuitionLoan(RepayType.EACH_SEMESTER, student.getUniversityInfo().getDegree().toDegreeGroup());
+                    loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
                 }
                 case 3 -> {
-                    loan = new HousingLoan(RepayType.EACH_GRADE, student.getCity().type);
+                    loan = loanService.getHousingLoan(student.getCity().type);
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
                     hasConditions = checkHousingLoanConditions();
+                    //set some things
                 }
             }
             hasPayment = studentService.hasPreviousLoanPayment(student, payment);
             if(!hasPayment && hasConditions){
                 CreditCard creditCard = getCreditCardInfo();
                 payment.setCreditCard(creditCard);
-                //PaymentService add a payment to student list + in paymentRepo
                 paymentService.registerPayment(payment);
             }
             else {

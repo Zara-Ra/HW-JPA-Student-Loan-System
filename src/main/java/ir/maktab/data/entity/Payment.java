@@ -29,14 +29,14 @@ public class Payment {
     Loan loan;
 
     @EqualsAndHashCode.Exclude
-    @Temporal(value = TemporalType.DATE)
+    @Temporal(value = TemporalType.TIMESTAMP)
     @CreationTimestamp
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     DegreeType degreeType;
     @EqualsAndHashCode.Exclude
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     CreditCard creditCard;
 
     @EqualsAndHashCode.Exclude

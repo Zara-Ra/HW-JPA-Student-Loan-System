@@ -9,6 +9,10 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class DateUtil {
+    public static final Date ASSUMED_TODAY_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
+    public static final Date ASSUMED_TODAY_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
+    //public static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
+
     private static final int DAYS_OF_WEEK = 7;
     private static final LocalDateTime FIRST_RANGE_START = LocalDateTime.of(2022, 10, 23, 0, 0);
     private static final LocalDateTime FIRST_RANGE_END = LocalDateTime.of(2022, 10, 29, 23, 59);

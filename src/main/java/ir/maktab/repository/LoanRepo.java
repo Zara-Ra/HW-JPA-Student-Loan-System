@@ -4,6 +4,7 @@ import ir.maktab.data.entity.loans.EducationLoan;
 import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.loans.TuitionLoan;
+import ir.maktab.data.enums.DegreeGroup;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -61,7 +62,7 @@ public class LoanRepo {
         em.close();
         return loan;
     }
-    public EducationLoan getEducationLoanByDegree(String degree){
+    public EducationLoan getEducationLoanByDegree(DegreeGroup degree){
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM EducationLoan e WHERE e.degreeGroup=:degree");
