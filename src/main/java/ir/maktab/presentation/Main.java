@@ -1,29 +1,14 @@
 package ir.maktab.presentation;
 
-import ir.maktab.data.entity.Payment;
-import ir.maktab.data.entity.loans.EducationLoan;
-import ir.maktab.data.entity.loans.Loan;
-import ir.maktab.data.entity.user.AccountInfo;
-import ir.maktab.data.entity.user.Student;
-import ir.maktab.data.entity.user.UniversityInfo;
-import ir.maktab.data.enums.*;
-import ir.maktab.repository.AccountInfoRepo;
-import ir.maktab.repository.LoanRepo;
-import ir.maktab.repository.StudentRepo;
-import ir.maktab.service.LoanService;
-import ir.maktab.service.PaymentService;
-import ir.maktab.service.StudentService;
-import ir.maktab.util.Dates;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
-
 public class Main {
+    private static final String DIVIDER = "---------------------------------------------";
     public static void main(String[] args) {
-        //new StudentLoanSystem().FirstMenu();
-
-        LoanService loanService = LoanService.getInstance();
+        StudentLoanSystem studentLoanSystem = new StudentLoanSystem();
+        System.out.println(DIVIDER);
+        System.out.println("Welcome to Student Loan Service");
+        System.out.println(DIVIDER);
+        studentLoanSystem.firstMenu();
+        /*LoanService loanService = LoanService.getInstance();
         StudentService studentService = StudentService.getInstance();
         PaymentService paymentService = PaymentService.getInstance();
 
@@ -45,7 +30,7 @@ public class Main {
         sara.ifPresent(System.out::println);
 
         Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-        paymentService.registerPayment(payment);
+        paymentService.registerPayment(payment);*/
 
     }
 

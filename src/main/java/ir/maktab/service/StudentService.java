@@ -3,9 +3,8 @@ package ir.maktab.service;
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.enums.RepayType;
-import ir.maktab.repository.PaymentRepo;
 import ir.maktab.repository.StudentRepo;
-import ir.maktab.util.Dates;
+import ir.maktab.util.date.DateUtil;
 
 import java.util.Date;
 import java.util.Optional;
@@ -39,9 +38,9 @@ public class StudentService {
             Date now = new Date();
             RepayType repayType = payment.getLoan().getRepayType();
             switch (repayType) {
-                case EACH_SEMESTER -> flag = Dates.areDatesInSameSemester(previousPaidDate, now);
+                case EACH_SEMESTER -> flag = DateUtil.areDatesInSameSemester(previousPaidDate, now);
                 case EACH_GRADE ->
-                        flag = Dates.areDatesInSameGrade(previousPaidDate, now, student.getUniversityInfo().getDegree());
+                        flag = DateUtil.areDatesInSameGrade(previousPaidDate, now, student.getUniversityInfo().getDegree());
                 default -> flag = true;
             }
         }

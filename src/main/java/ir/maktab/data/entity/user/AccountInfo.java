@@ -16,8 +16,8 @@ public class AccountInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(nullable = false, unique = true, updatable = false, length = 10)
+    @Column(nullable = false, unique = true, updatable = false)
     String username;
-    @Column(nullable = false, length = 8)//todo test this length
+    @Column(nullable = false)//todo test this length length = 8
     String password;
 }

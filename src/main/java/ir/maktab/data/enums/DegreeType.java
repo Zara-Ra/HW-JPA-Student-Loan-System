@@ -1,18 +1,20 @@
 package ir.maktab.data.enums;
 
 public enum DegreeType {
-    ASSOCIATE_DEGREE(2),
-    BACHELOR(4),
-    CONTINUOUS_MASTER(6),
-    DISCONTINUOUS_MASTER(2),
-    PHD(5),
-    CONTINUOUS_PHD(5),
-    DISCONTINUOUS_PHD(5);
+    ASSOCIATE_DEGREE(2,"associate"),
+    BACHELOR(4,"bachelor"),
+    CONTINUOUS_MASTER(6,"continuous master"),
+    DISCONTINUOUS_MASTER(2,"discontinuous master"),
+    PHD(5,"phd"),
+    CONTINUOUS_PHD(5,"continuous phd"),
+    DISCONTINUOUS_PHD(5,"discontinuous phd");
     public final int graduateYears;
+    private final String name;
     private static final int DAYS_OF_YEAR = 365;
 
-    DegreeType(int graduateYears) {
+    DegreeType(int graduateYears,String name) {
         this.graduateYears = graduateYears;
+        this.name = name;
     }
 
     public int getGraduationInDays() {

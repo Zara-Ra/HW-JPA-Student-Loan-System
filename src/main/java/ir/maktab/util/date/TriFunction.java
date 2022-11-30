@@ -1,4 +1,4 @@
-package ir.maktab.util;
+package ir.maktab.util.date;
 
 import java.time.LocalDateTime;
 

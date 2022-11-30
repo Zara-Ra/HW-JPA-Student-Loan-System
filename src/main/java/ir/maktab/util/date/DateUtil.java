@@ -1,4 +1,4 @@
-package ir.maktab.util;
+package ir.maktab.util.date;
 
 import ir.maktab.data.enums.DegreeType;
 
@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-public class Dates {
+public class DateUtil {
     private static final int DAYS_OF_WEEK = 7;
     private static final LocalDateTime FIRST_RANGE_START = LocalDateTime.of(2022, 10, 23, 0, 0);
     private static final LocalDateTime FIRST_RANGE_END = LocalDateTime.of(2022, 10, 29, 23, 59);

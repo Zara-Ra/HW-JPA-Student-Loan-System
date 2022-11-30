@@ -5,7 +5,7 @@ import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.UniversityType;
-import ir.maktab.util.Dates;
+import ir.maktab.util.date.DateUtil;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class StudentServiceTest {
                 , UniversityType.PUBLIC_DAILY, 2016, DegreeType.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(1988, 2, 26, 0, 0);
-        Date birth = Dates.localDateTimeToDate(localDate);
+        Date birth = DateUtil.localDateTimeToDate(localDate);
 
         student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
                 , "34123", "0080343453", birth, true,false, null
