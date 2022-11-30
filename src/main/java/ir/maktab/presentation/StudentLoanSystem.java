@@ -1,22 +1,28 @@
 package ir.maktab.presentation;
 
+import ir.maktab.data.entity.CreditCard;
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.loans.EducationLoan;
+import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
+import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
+import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.RepayType;
 import ir.maktab.data.enums.UniversityType;
-import ir.maktab.util.exceptions.NotInDateRangeException;
-import ir.maktab.util.exceptions.ValidationException;
+import ir.maktab.service.PaymentService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.date.DateUtil;
+import ir.maktab.util.exceptions.NotInDateRangeException;
+import ir.maktab.util.exceptions.ValidationException;
 import ir.maktab.util.validation.Validation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
@@ -26,7 +32,12 @@ import static java.lang.System.exit;
 public class StudentLoanSystem {
     private final Scanner scanner = new Scanner(System.in);
     private static final String DIVIDER = "---------------------------------------------";
+
+    private static final Date VALID_DATE_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
+    private static final Date VALID_DATE_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
+    private static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
     public static final StudentService studentService = StudentService.getInstance();
+    public static final PaymentService paymentService = PaymentService.getInstance();
     private Student student;
 
     public void firstMenu() {
@@ -45,20 +56,53 @@ public class StudentLoanSystem {
             switch (choice) {
                 case 1 -> {
                     signUp();
+                    secondMenu();
                 }
                 case 2 -> {
                     signIn();
+                    secondMenu();
                 }
                 case 3 -> {
                 }
                 default -> {
+                    exit(0);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             firstMenu();
         }
+    }
 
+    private void secondMenu() {
+        System.out.println("Press 1 --> Register For Loan");
+        System.out.println("Press 2 --> Repay Loan");
+        System.out.println("Press any Key to Exit");
+        System.out.println(DIVIDER);
+        int choice = 0;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            exit(0);
+        }
+        try {
+            switch (choice) {
+                case 1 -> {
+                    registerForLoan();
+                    secondMenu();
+                }
+                case 2 -> {
+                    repayLoan();
+                    secondMenu();
+                }
+                default -> {
+                    exit(0);
+                }
+            }
+        } catch (NotInDateRangeException e) {
+            System.err.println(e.getMessage());
+            secondMenu();
+        }
     }
 
     private void signUp() {
@@ -91,6 +135,10 @@ public class StudentLoanSystem {
             String birthdate = scanner.nextLine();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = formatter.parse(birthdate);
+
+            System.out.println("City:");
+            String cityName = scanner.nextLine();
+            City city = City.valueOfCity(cityName);
 
             System.out.println("University name: ");
             String uniName = scanner.nextLine();
@@ -126,7 +174,7 @@ public class StudentLoanSystem {
             AccountInfo account = new AccountInfo(null, username, pass);
 
             student = new Student(null, name, family, mother, father, bcn, nc, date, false, false
-                    , null, null, account, universityInfo);
+                     ,city, null, account, universityInfo);
             studentService.singUp(student);
 
         } catch (ParseException e) {
@@ -154,31 +202,83 @@ public class StudentLoanSystem {
     }
 
     public void registerForLoan() {
-        //is the date first week of Aban or last week of Bahman
-        //show three kinds of loan
-        //registerForEducationLoan
-        //registerForHouseLoan
-        //registerForTuitionLoan
-        //call Student service to check prev payment(not in same semester or grade)
-        //get card info,validate    or    check isDorm isMarried + get spouse + get contract + get card info
-        //call Student service to register payment
+        //checkRegistrationDate(TODAY_DATE);
+        paymentService.checkRegistrationDate(VALID_DATE_1);
+        System.out.println("Press 1 --> Education Loan");
+        System.out.println("Press 2 --> Tuition Loan");
+        System.out.println("Press 3 --> Housing Loan ");
+        System.out.println(DIVIDER);
+        int choice = 0;
+        Loan loan;
+        Payment payment = null;
+        boolean hasPayment;
+        boolean hasConditions = true;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1 -> {
+                    loan = new EducationLoan(RepayType.EACH_SEMESTER, student.getUniversityInfo().getDegree().toDegreeGroup());
+
+                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                }
+                case 2 -> {
+                    loan = new TuitionLoan(RepayType.EACH_SEMESTER, student.getUniversityInfo().getDegree().toDegreeGroup());
+                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                }
+                case 3 -> {
+                    loan = new HousingLoan(RepayType.EACH_GRADE, student.getCity().type);
+                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                    hasConditions = checkHousingLoanConditions();
+                }
+            }
+            hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+            if(!hasPayment && hasConditions){
+                CreditCard creditCard = getCreditCardInfo();
+                payment.setCreditCard(creditCard);
+                //PaymentService add a payment to student list + in paymentRepo
+                paymentService.registerPayment(payment);
+            }
+            else {
+                System.out.println("You Don't Have The Conditions To Register For This Loan");
+            }
+        } catch (NumberFormatException e) {
+            secondMenu();
+        } catch (ValidationException | ParseException e){
+            System.err.println(e.getMessage());
+            secondMenu();
+        }
     }
+
+    private boolean checkHousingLoanConditions() {
+        System.out.println("Are You Married?(Y/N)");
+        System.out.println("Do You Live in University Dorm?(Y/N)");
+        System.out.println("Enter Your Spouse Information");        //todo what should be compared for spouse
+        System.out.println("Name:");                                //maybe write a query to find person in payment
+        System.out.println("Family Name:");                         //with national code
+        System.out.println("National Code:");
+        System.out.println("Enter House Contract:");
+        return true;
+    }
+
+    private CreditCard getCreditCardInfo() throws ParseException {
+        System.out.println("Enter Your 16 Digit Card Number(Melli,Maskan,Tejarat,Refah):");
+        String card = scanner.nextLine();
+        Validation.validateCardNumber(card);
+
+        System.out.println("Enter cvv2:");
+        String cvv2 = scanner.nextLine();
+        Validation.validateCvv(cvv2);
+
+        System.out.println("Enter Expiry Date:");
+        String expDate = scanner.nextLine();
+        Date date = Validation.validateExpDate(expDate);
+
+        return new CreditCard(null,card,cvv2,date);
+    }
+
 
     public void repayLoan() {
 
     }
 
-    public boolean checkRegistrationDate(Date date) {
-        if (!DateUtil.isInRange(date))
-            throw new NotInDateRangeException("You Can Not Register For A Loan At This Date (Registration Time is First Week " +
-                    "Of Aban And Last Week of Bahman)");
-        return true;
-    }
-
-    public boolean checkRegistrationCondition(Student student) {//todo has some designing issues,fix it when reached
-        Loan loan = new EducationLoan(RepayType.EACH_SEMESTER, student.getUniversityInfo().getDegree().toDegreeGroup());
-        Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-        return !studentService.hasPreviousLoanPayment(student, payment);
-
-    }
 }

@@ -33,4 +33,9 @@ public class HousingLoan extends Loan {
         super(repayType, amount);
         this.cityType = cityType;
     }
+
+    public HousingLoan(RepayType repayType, CityType cityType) {
+        super(repayType);
+        this.cityType = cityType;
+    }
 }

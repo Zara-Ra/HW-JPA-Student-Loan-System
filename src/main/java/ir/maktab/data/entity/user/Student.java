@@ -1,6 +1,7 @@
 package ir.maktab.data.entity.user;
 
 import ir.maktab.data.entity.Payment;
+import ir.maktab.data.enums.City;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -25,8 +26,8 @@ public class Student extends Person implements Serializable {
     @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)
     List<Payment> paymentList = new ArrayList<>();
 
-    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, String address, String houseContractNum, AccountInfo accountInfo, UniversityInfo universityInfo) {
-        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm, address, houseContractNum);
+    public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, City city, String houseContractNum, AccountInfo accountInfo, UniversityInfo universityInfo) {
+        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm,city, houseContractNum);
         this.accountInfo = accountInfo;
         this.universityInfo = universityInfo;
     }

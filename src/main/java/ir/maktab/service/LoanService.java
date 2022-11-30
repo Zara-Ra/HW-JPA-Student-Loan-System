@@ -1,6 +1,11 @@
 package ir.maktab.service;
 
+import ir.maktab.data.entity.loans.EducationLoan;
+import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
+import ir.maktab.data.entity.loans.TuitionLoan;
+import ir.maktab.data.enums.CityType;
+import ir.maktab.data.enums.DegreeGroup;
 import ir.maktab.repository.LoanRepo;
 
 public class LoanService {
@@ -17,6 +22,15 @@ public class LoanService {
 
     public void addLoan(Loan loan) {
         loanRepo.save(loan);
+    }
+    public EducationLoan getEducationLoan(DegreeGroup degreeGroup){
+        return loanRepo.getEducationLoanByDegree(degreeGroup.name());
+    }
+    public TuitionLoan getTuitionLoan(DegreeGroup degreeGroup){
+        return loanRepo.getTuitionLoanByDegree(degreeGroup.name());
+    }
+    public HousingLoan getHousingLoan(CityType cityType){
+        return loanRepo.getHouseLoanByCity(cityType.name());
     }
 
 }

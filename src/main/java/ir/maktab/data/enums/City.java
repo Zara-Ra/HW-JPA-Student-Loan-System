@@ -9,12 +9,21 @@ public enum City {
     AHVAZ("Ahvaz",CityType.METROPOLIS),
     QOM("Qom",CityType.METROPOLIS),
     MASHHAD("Mashhad",CityType.METROPOLIS),
-    KARAJ("Karaj",CityType.METROPOLIS);
+    KARAJ("Karaj",CityType.METROPOLIS),
+    OTHER("Other",CityType.OTHER);
 
     private final String name;
-    private final CityType type;
+    public final CityType type;
     City(String name,CityType type){
         this.name = name;
         this.type = type;
+    }
+
+    public static City valueOfCity(String cityName) {
+        try{
+            return City.valueOf(cityName);
+        } catch (IllegalArgumentException e){
+            return OTHER;
+        }
     }
 }

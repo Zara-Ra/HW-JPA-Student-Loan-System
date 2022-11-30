@@ -1,5 +1,6 @@
 package ir.maktab.data.entity.user;
 
+import ir.maktab.data.enums.City;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -39,7 +40,7 @@ public class Person {   //personal info
     @EqualsAndHashCode.Exclude
     boolean liveInDorm;
     @EqualsAndHashCode.Exclude
-    String address;
+    City city;
     @EqualsAndHashCode.Exclude
     String houseContractNum;
 }

@@ -25,7 +25,7 @@ public class DateUtil {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
-    public static boolean isInRange(Date date) {
+    public static boolean isInRegistrationRange(Date date) {
         LocalDateTime testDate = dateToLocalDateTime(date);
         TriFunction inRange = (t, s, e) -> t.equals(s) || t.equals(e) || (t.isAfter(s) && t.isBefore(e));
         return inRange.test(testDate, FIRST_RANGE_START, FIRST_RANGE_END)
@@ -47,5 +47,10 @@ public class DateUtil {
         long daysBetween = Math.abs(numberOfDaysBetween(firstDate, secondDate));
         long graduationInDays = degreeType.getGraduationInDays();
         return graduationInDays > daysBetween;
+    }
+
+    public static boolean isDateValid(Date date){
+        LocalDateTime testDate = dateToLocalDateTime(date);
+        return testDate.isAfter(LocalDateTime.now());
     }
 }

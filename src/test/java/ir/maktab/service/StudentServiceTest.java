@@ -23,7 +23,7 @@ public class StudentServiceTest {
     private Student student;
     @Order(1)
     @Test
-    public void signUpTest(){
+    public void signUpTest(){//this info is not valid write another test, validtion will fail
         AccountInfo accountInfo = new AccountInfo(null,"zara", "12345678");
 
         UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "TehranUniversity"

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.util.List;
+import java.util.Objects;
 
 @DiscriminatorValue(value = "TUITION")
 @Getter
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-////equalhash
+@EqualsAndHashCode
 public class TuitionLoan extends Loan {
     @Enumerated(value = EnumType.STRING)
     DegreeGroup degreeGroup;
@@ -32,5 +33,23 @@ public class TuitionLoan extends Loan {
     public TuitionLoan(RepayType repayType, double amount, DegreeGroup degreeGroup) {
         super(repayType, amount);
         this.degreeGroup = degreeGroup;
+    }
+    public TuitionLoan(RepayType repayType, DegreeGroup degreeGroup) {
+        super(repayType);
+        this.degreeGroup = degreeGroup;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TuitionLoan)) return false;
+        if (!super.equals(o)) return false;
+        TuitionLoan that = (TuitionLoan) o;
+        return degreeGroup == that.degreeGroup;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), degreeGroup);
     }
 }
