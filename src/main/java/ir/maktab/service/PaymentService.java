@@ -26,22 +26,25 @@ public class PaymentService {
     }
 
     private final PaymentRepo paymentRepo = PaymentRepo.getInstance();
+    private final StudentService studentService = StudentService.getInstance();
 
     public void registerPayment(Payment payment) {
         double totalAmount = payment.getLoan().getAmount();
         double firstYearRepaymentAmount = firstYearRepaymentAmount(totalAmount, REPAY_YEARS, INTEREST_RATE);
         int repayNum = 0;
-        Date repayStartDate = DateUtil.loanStartDate(payment.getStudent().getUniversityInfo().);
+        Date repayDate = studentService.calculateGraduationDate(payment.getStudent());
         for (int i = 0; i < REPAY_YEARS; i++) {
-            double eachMonthRepaymentAmount = firstYearRepaymentAmount * Math.pow(2,i);
+            double eachMonthRepaymentAmount = firstYearRepaymentAmount * Math.pow(2, i);
             for (int j = 0; j < MONTHS_OF_YEAR; j++) {
-                Repayment repayment = new Repayment(null, payment, repayNum++,eachMonthRepaymentAmount, , false);
+                if (i != 0 || j != 0) {
+                    repayDate = DateUtil.addMonthToDate(repayDate);
+                }
+                Repayment repayment = new Repayment(null, payment, repayNum++, eachMonthRepaymentAmount, repayDate,
+                        false);
                 payment.getRepaymentList().add(repayment);
             }
-
         }
         paymentRepo.save(payment);
-
     }
 
     private double firstYearRepaymentAmount(double totalLoanAmount, int repayYears, double interestRate) {

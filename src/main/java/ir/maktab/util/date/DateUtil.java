@@ -73,4 +73,10 @@ public class DateUtil {
         LocalDateTime localDateTime2 = dateToLocalDateTime(date2);
         return localDateTime1.compareTo(localDateTime2);
     }
+
+    public static Date addMonthToDate(Date date) {
+        LocalDateTime inputDate = dateToLocalDateTime(date);
+        LocalDateTime resultDate = inputDate.plusMonths(1);
+        return localDateTimeToDate(resultDate);
+    }
 }
