@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -25,7 +26,8 @@ public class UniversityInfo {
     @Enumerated(value = EnumType.STRING)
     UniversityType universityType;
     @Column(nullable = false)
-    int enteringYear;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    Date entryDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     DegreeType degree;

@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-//equalhash
+@EqualsAndHashCode
 public class HousingLoan extends Loan {
     @Enumerated(value = EnumType.STRING)
     CityType cityType;

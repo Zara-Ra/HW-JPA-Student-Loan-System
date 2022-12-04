@@ -27,10 +27,10 @@ public class LoanService {
         return loanRepo.getEducationLoanByDegree(degreeGroup);
     }
     public TuitionLoan getTuitionLoan(DegreeGroup degreeGroup){
-        return loanRepo.getTuitionLoanByDegree(degreeGroup.name());
+        return loanRepo.getTuitionLoanByDegree(degreeGroup);
     }
     public HousingLoan getHousingLoan(CityType cityType){
-        return loanRepo.getHouseLoanByCity(cityType.name());
+        return loanRepo.getHouseLoanByCity(cityType);
     }
 
 }

@@ -3,6 +3,7 @@ package ir.maktab.service;
 import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
+import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.UniversityType;
 import ir.maktab.util.date.DateUtil;
@@ -34,7 +35,7 @@ public class StudentServiceTest {
         Date birth = DateUtil.localDateTimeToDate(localDate);
 
         student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
-                , "34123", "0080218725", birth, false,false, null
+                , "34123", "0080218725", birth, false,false, City.TEHRAN
                 , null, accountInfo, universityInfo);
 
         studentService.singUp(student);

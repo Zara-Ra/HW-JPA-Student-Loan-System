@@ -40,6 +40,7 @@ public class Person {   //personal info
     @EqualsAndHashCode.Exclude
     boolean liveInDorm;
     @EqualsAndHashCode.Exclude
+    @Enumerated(value = EnumType.STRING)
     City city;
     @EqualsAndHashCode.Exclude
     String houseContractNum;

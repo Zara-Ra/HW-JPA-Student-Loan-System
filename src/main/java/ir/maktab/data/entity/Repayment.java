@@ -21,7 +21,7 @@ public class Repayment {
     Payment payment;
     int repaymentNum;//1-60
     double amount;
-    @Temporal(value = TemporalType.DATE)
+    @Temporal(value = TemporalType.TIMESTAMP)
     Date dueDate;
     boolean isPaid = false;
 

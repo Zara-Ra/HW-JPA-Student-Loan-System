@@ -40,7 +40,7 @@ public class Payment {
     CreditCard creditCard;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "payment")
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.MERGE)// fetch ??
     List<Repayment> repaymentList = new ArrayList<>();
 
     public Payment(Student student, Loan loan, DegreeType degreeType) {

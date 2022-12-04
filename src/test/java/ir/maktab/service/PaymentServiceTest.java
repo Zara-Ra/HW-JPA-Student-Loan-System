@@ -11,5 +11,5 @@ public class PaymentServiceTest {
     private static final PaymentService paymentService = PaymentService.getInstance();
     @Order(1)
     @Test
-    public void
+    public void registerPayment(){}
 }

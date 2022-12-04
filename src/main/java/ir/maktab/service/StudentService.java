@@ -48,4 +48,13 @@ public class StudentService {
         return flag;
     }
 
+    public void isGraduated(Student student) {
+        ....
+    calculateGraduationYear(student);
+    }
+    public int calculateGraduationYear(Student student){
+        int graduateYears = student.getUniversityInfo().getDegree().graduateYears;
+        int enteringYear = student.getUniversityInfo().getEntryDate();
+        return enteringYear + graduateYears;
+    }
 }

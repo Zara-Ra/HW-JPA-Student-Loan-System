@@ -2,17 +2,13 @@ package ir.maktab.presentation;
 
 import ir.maktab.data.entity.CreditCard;
 import ir.maktab.data.entity.Payment;
-import ir.maktab.data.entity.loans.EducationLoan;
-import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
-import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
-import ir.maktab.data.enums.RepayType;
 import ir.maktab.data.enums.UniversityType;
 import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
@@ -24,7 +20,6 @@ import ir.maktab.util.validation.Validation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
@@ -170,7 +165,7 @@ public class StudentLoanSystem {
             AccountInfo account = new AccountInfo(null, nc, pass);
 
             student = new Student(null, name, family, mother, father, bcn, nc, date, false, false
-                     ,city, null, account, universityInfo);
+                    , city, null, account, universityInfo);
             studentService.singUp(student);
 
         } catch (ParseException e) {
@@ -185,7 +180,7 @@ public class StudentLoanSystem {
     }
 
     private void signIn() {
-        System.out.println("Username: ");
+        System.out.println("Username:(National Number) ");
         String username = scanner.nextLine();
         Validation.validateNationalCode(username);
 
@@ -200,6 +195,7 @@ public class StudentLoanSystem {
     public void registerForLoan() {
         //paymentService.checkRegistrationDate(TODAY_DATE);
         paymentService.checkRegistrationDate(DateUtil.getToday());
+        studentService.isGraduated(student);
         System.out.println("Press 1 --> Education Loan");
         System.out.println("Press 2 --> Tuition Loan");
         System.out.println("Press 3 --> Housing Loan ");
@@ -209,7 +205,7 @@ public class StudentLoanSystem {
         Loan loan;
         Payment payment = null;
         boolean hasPayment = true;
-        boolean hasConditions;
+        boolean hasConditions = false;
         try {
             choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
@@ -221,34 +217,32 @@ public class StudentLoanSystem {
                 }
                 case 2 -> {
                     hasConditions = checkTuitionLoanConditions();
-                    if(hasConditions){
+                    if (hasConditions) {
                         loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                         payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
                         hasPayment = studentService.hasPreviousLoanPayment(student, payment);
                     }
                 }
                 case 3 -> {
-                    hasConditions = checkHousingLoanConditions();
-                    if(hasConditions) {
-                        loan = loanService.getHousingLoan(student.getCity().type);
-                        payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-                        hasPayment = studentService.hasPreviousLoanPayment(student, payment);
-                    }
+                    loan = loanService.getHousingLoan(student.getCity().type);
+                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                    hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+                    if (!hasPayment)
+                        hasConditions = checkHousingLoanConditions();
                 }
                 default -> throw new NumberFormatException();
             }
 
-            if(!hasPayment && hasConditions){
+            if (!hasPayment && hasConditions) {
                 CreditCard creditCard = getCreditCardInfo();
                 payment.setCreditCard(creditCard);
                 paymentService.registerPayment(payment);
-            }
-            else {
-                System.out.println("You Don't Have The Conditions To Register For This Loan");
+            } else {
+                System.err.println("You Don't Have The Conditions To Register For This Loan");
             }
         } catch (NumberFormatException e) {
             secondMenu();
-        } catch (ValidationException | ParseException e){
+        } catch (ValidationException | ParseException e) {
             System.err.println(e.getMessage());
             secondMenu();
         }
@@ -257,17 +251,15 @@ public class StudentLoanSystem {
     private boolean checkHousingLoanConditions() {
         System.out.println("Are You Married?(Y/N)");
         String yesNo = scanner.nextLine();
-        if(yesNo.equals("Y") || yesNo.equals("y")){
+        if (yesNo.equals("Y") || yesNo.equals("y")) {
             student.setMarried(true);
-        }
-        else
+        } else
             return false;
         System.out.println("Do You Live in University Dorm?(Y/N)");
         yesNo = scanner.nextLine();
-        if(yesNo.equals("N") || yesNo.equals("n")){
+        if (yesNo.equals("N") || yesNo.equals("n")) {
             student.setLiveInDorm(false);
-        }
-        else
+        } else
             return false;
         System.out.println("Enter Your Spouse Information");        //todo what should be compared for spouse
         System.out.println("Name:");                                //maybe write a query to find person in payment
@@ -281,10 +273,11 @@ public class StudentLoanSystem {
         Validation.validateNationalCode(spouseNc);
         System.out.println("Enter House Contract Number:");
         student.setHouseContractNum(scanner.nextLine());
-        Person spouse = new Person(spouseName,spouseFamily,spouseNc);
-        return paymentService.checkSpouseConditions(student,spouse);
+        Person spouse = new Person(spouseName, spouseFamily, spouseNc);
+        return paymentService.checkSpouseConditions(student, spouse);
     }
-    private boolean checkTuitionLoanConditions(){
+
+    private boolean checkTuitionLoanConditions() {
         return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
     }
 
@@ -301,7 +294,7 @@ public class StudentLoanSystem {
         String expDate = scanner.nextLine();
         Date date = Validation.validateExpDate(expDate);
 
-        return new CreditCard(null,card,cvv2,date);
+        return new CreditCard(null, card, cvv2, date);
     }
 
 

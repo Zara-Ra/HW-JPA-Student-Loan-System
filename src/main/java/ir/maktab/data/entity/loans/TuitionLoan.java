@@ -38,18 +38,4 @@ public class TuitionLoan extends Loan {
         super(repayType);
         this.degreeGroup = degreeGroup;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TuitionLoan)) return false;
-        if (!super.equals(o)) return false;
-        TuitionLoan that = (TuitionLoan) o;
-        return degreeGroup == that.degreeGroup;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), degreeGroup);
-    }
 }
