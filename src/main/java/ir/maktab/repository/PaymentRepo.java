@@ -1,7 +1,10 @@
 package ir.maktab.repository;
 
 import ir.maktab.data.entity.Payment;
+import ir.maktab.data.entity.loans.EducationLoan;
+import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
+import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
 
 import javax.persistence.EntityManager;
@@ -52,7 +55,6 @@ public class PaymentRepo {
         return paymentList;
     }
 
-
     public Payment find(Student student, Loan loan) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
@@ -63,5 +65,19 @@ public class PaymentRepo {
         em.getTransaction().commit();
         em.close();
         return singleResult;
+    }
+
+    public List<Payment> findByNationalNumber(Person person){
+        EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("FROM Payment p where p.student.name=:name and p.student.familyName=:family " +
+                "and p.student.nationalNum=:nationalNum");
+        query.setParameter("name",person.getName());
+        query.setParameter("family",person.getFamilyName());
+        query.setParameter("nationalNum",person.getNationalNum());
+        List<Payment> paymentList = query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return paymentList;
     }
 }

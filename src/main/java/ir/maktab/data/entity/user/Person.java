@@ -43,5 +43,11 @@ public class Person {   //personal info
     City city;
     @EqualsAndHashCode.Exclude
     String houseContractNum;
+
+    public Person(String name, String familyName, String nationalNum) {
+        this.name = name;
+        this.familyName = familyName;
+        this.nationalNum = nationalNum;
+    }
 }
 

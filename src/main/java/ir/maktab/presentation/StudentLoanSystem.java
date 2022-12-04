@@ -7,6 +7,7 @@ import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.entity.user.AccountInfo;
+import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
@@ -162,15 +163,11 @@ public class StudentLoanSystem {
             UniversityInfo universityInfo = new UniversityInfo(null, studentNum, uniName, universityType
                     , year, degreeType1);
 
-            System.out.println("Username: ");
-            String username = scanner.nextLine();
-            Validation.validateUsername(username);
-
             System.out.println("Password: ");
             String pass = scanner.nextLine();
             Validation.validatePassword(pass);
 
-            AccountInfo account = new AccountInfo(null, username, pass);
+            AccountInfo account = new AccountInfo(null, nc, pass);
 
             student = new Student(null, name, family, mother, father, bcn, nc, date, false, false
                      ,city, null, account, universityInfo);
@@ -190,7 +187,7 @@ public class StudentLoanSystem {
     private void signIn() {
         System.out.println("Username: ");
         String username = scanner.nextLine();
-        Validation.validateUsername(username);
+        Validation.validateNationalCode(username);
 
         System.out.println("Password: ");
         String pass = scanner.nextLine();
@@ -202,35 +199,45 @@ public class StudentLoanSystem {
 
     public void registerForLoan() {
         //paymentService.checkRegistrationDate(TODAY_DATE);
-        paymentService.checkRegistrationDate(DateUtil.ASSUMED_TODAY_1);
+        paymentService.checkRegistrationDate(DateUtil.getToday());
         System.out.println("Press 1 --> Education Loan");
         System.out.println("Press 2 --> Tuition Loan");
         System.out.println("Press 3 --> Housing Loan ");
+        System.out.println("Press any key --> Back");
         System.out.println(DIVIDER);
         int choice = 0;
         Loan loan;
         Payment payment = null;
-        boolean hasPayment;
-        boolean hasConditions = true;
+        boolean hasPayment = true;
+        boolean hasConditions;
         try {
             choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
                 case 1 -> {
+                    hasConditions = true;
                     loan = loanService.getEducationLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                    hasPayment = studentService.hasPreviousLoanPayment(student, payment);
                 }
                 case 2 -> {
-                    loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
-                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                    hasConditions = checkTuitionLoanConditions();
+                    if(hasConditions){
+                        loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
+                        payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                        hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+                    }
                 }
                 case 3 -> {
-                    loan = loanService.getHousingLoan(student.getCity().type);
-                    payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
                     hasConditions = checkHousingLoanConditions();
-                    //set some things
+                    if(hasConditions) {
+                        loan = loanService.getHousingLoan(student.getCity().type);
+                        payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+                        hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+                    }
                 }
+                default -> throw new NumberFormatException();
             }
-            hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+
             if(!hasPayment && hasConditions){
                 CreditCard creditCard = getCreditCardInfo();
                 payment.setCreditCard(creditCard);
@@ -249,13 +256,36 @@ public class StudentLoanSystem {
 
     private boolean checkHousingLoanConditions() {
         System.out.println("Are You Married?(Y/N)");
+        String yesNo = scanner.nextLine();
+        if(yesNo.equals("Y") || yesNo.equals("y")){
+            student.setMarried(true);
+        }
+        else
+            return false;
         System.out.println("Do You Live in University Dorm?(Y/N)");
+        yesNo = scanner.nextLine();
+        if(yesNo.equals("N") || yesNo.equals("n")){
+            student.setLiveInDorm(false);
+        }
+        else
+            return false;
         System.out.println("Enter Your Spouse Information");        //todo what should be compared for spouse
         System.out.println("Name:");                                //maybe write a query to find person in payment
+        String spouseName = scanner.nextLine();
+        Validation.validateName(spouseName);
         System.out.println("Family Name:");                         //with national code
+        String spouseFamily = scanner.nextLine();
+        Validation.validateName(spouseFamily);
         System.out.println("National Code:");
-        System.out.println("Enter House Contract:");
-        return true;
+        String spouseNc = scanner.nextLine();
+        Validation.validateNationalCode(spouseNc);
+        System.out.println("Enter House Contract Number:");
+        student.setHouseContractNum(scanner.nextLine());
+        Person spouse = new Person(spouseName,spouseFamily,spouseNc);
+        return paymentService.checkSpouseConditions(student,spouse);
+    }
+    private boolean checkTuitionLoanConditions(){
+        return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
     }
 
     private CreditCard getCreditCardInfo() throws ParseException {

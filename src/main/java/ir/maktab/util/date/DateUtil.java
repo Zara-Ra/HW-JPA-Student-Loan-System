@@ -11,7 +11,7 @@ import java.util.Date;
 public class DateUtil {
     public static final Date ASSUMED_TODAY_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
     public static final Date ASSUMED_TODAY_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
-    //public static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    public static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
     private static final int DAYS_OF_WEEK = 7;
     private static final LocalDateTime FIRST_RANGE_START = LocalDateTime.of(2022, 10, 23, 0, 0);
@@ -20,6 +20,9 @@ public class DateUtil {
     private static final LocalDateTime SECOND_RANGE_START = LocalDateTime.of(2023, 2, 14, 0, 0);
     private static final LocalDateTime SECOND_RANGE_END = LocalDateTime.of(2023, 2, 20, 23, 59);
 
+    public static Date getToday(){
+        return ASSUMED_TODAY_1;
+    }
     public static Date localDateTimeToDate(LocalDateTime localDateTime) {
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());

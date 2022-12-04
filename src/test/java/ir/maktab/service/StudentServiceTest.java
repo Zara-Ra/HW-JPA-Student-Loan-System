@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -23,25 +24,39 @@ public class StudentServiceTest {
     private Student student;
     @Order(1)
     @Test
-    public void signUpTest(){//this info is not valid write another test, validtion will fail
-        AccountInfo accountInfo = new AccountInfo(null,"zara", "12345678");
+    public void signUpTest(){
+        AccountInfo accountInfo = new AccountInfo(null,"0080218725", "aA1@zzzz");
 
-        UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "TehranUniversity"
-                , UniversityType.PUBLIC_DAILY, 2016, DegreeType.BACHELOR);
+        UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "Tehran University"
+                , UniversityType.PRIVATE, 2021, DegreeType.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(1988, 2, 26, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
 
         student = new Student(null, "Zahra", "Rahimi", "Tahere", "Reza"
-                , "34123", "0080343453", birth, true,false, null
+                , "34123", "0080218725", birth, false,false, null
                 , null, accountInfo, universityInfo);
 
-        //studentService.singUp(student);
+        studentService.singUp(student);
     }
     @Order(2)
     @Test
     public void signInTest(){
-        Optional<Student> optionalStudent = studentService.signIn("zara", "12345678");
+        Optional<Student> optionalStudent = studentService.signIn("0080218725", "aA1@zzzz");
         assertTrue(optionalStudent.isPresent());
+    }
+
+    @Order(2)
+    @Test
+    public void invalidUsernameSignInTest(){
+        Optional<Student> optionalStudent = studentService.signIn("12345678","aA1@zzzz");
+        assertFalse(optionalStudent.isPresent());
+    }
+
+    @Order(3)
+    @Test
+    public void invalidPasswordSignInTest(){
+        Optional<Student> optionalStudent = studentService.signIn("0080218725","aaaaaaaa");
+        assertFalse(optionalStudent.isPresent());
     }
 }
