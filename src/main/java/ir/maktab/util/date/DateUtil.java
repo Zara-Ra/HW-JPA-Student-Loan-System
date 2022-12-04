@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.Date;
 
 public class DateUtil {
@@ -59,5 +60,17 @@ public class DateUtil {
     public static boolean isDateValid(Date date){
         LocalDateTime testDate = dateToLocalDateTime(date);
         return testDate.isAfter(LocalDateTime.now());
+    }
+
+    public static Date addYearsToDate(Date date, int years) {
+        LocalDateTime inputDate = dateToLocalDateTime(date);
+        LocalDateTime plusYears = inputDate.plusYears(years);
+        return localDateTimeToDate(plusYears);
+    }
+
+    public static int compare(Date date1, Date date2) {
+        LocalDateTime localDateTime1 = dateToLocalDateTime(date1);
+        LocalDateTime localDateTime2 = dateToLocalDateTime(date2);
+        return localDateTime1.compareTo(localDateTime2);
     }
 }

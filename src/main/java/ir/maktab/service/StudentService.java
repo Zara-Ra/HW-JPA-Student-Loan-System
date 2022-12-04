@@ -5,6 +5,7 @@ import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.enums.RepayType;
 import ir.maktab.repository.StudentRepo;
 import ir.maktab.util.date.DateUtil;
+import ir.maktab.util.exceptions.GraduationException;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -48,13 +49,12 @@ public class StudentService {
         return flag;
     }
 
-    public void isGraduated(Student student) {
-        ....
-    calculateGraduationYear(student);
+    public boolean isGraduated(Student student) {
+        return DateUtil.compare(calculateGraduationDate(student), DateUtil.getToday()) >= 0;
     }
-    public int calculateGraduationYear(Student student){
+    public Date calculateGraduationDate(Student student){
         int graduateYears = student.getUniversityInfo().getDegree().graduateYears;
-        int enteringYear = student.getUniversityInfo().getEntryDate();
-        return enteringYear + graduateYears;
+        Date entryDate = student.getUniversityInfo().getEntryDate();
+        return DateUtil.addYearsToDate(entryDate,graduateYears);
     }
 }

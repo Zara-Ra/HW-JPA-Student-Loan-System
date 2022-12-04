@@ -14,6 +14,7 @@ import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.date.DateUtil;
+import ir.maktab.util.exceptions.GraduationException;
 import ir.maktab.util.exceptions.NotInDateRangeException;
 import ir.maktab.util.exceptions.ValidationException;
 import ir.maktab.util.validation.Validation;
@@ -94,7 +95,7 @@ public class StudentLoanSystem {
                     exit(0);
                 }
             }
-        } catch (NotInDateRangeException e) {
+        } catch (NotInDateRangeException | GraduationException e) {
             System.err.println(e.getMessage());
             secondMenu();
         }
@@ -147,16 +148,16 @@ public class StudentLoanSystem {
             String studentNum = scanner.nextLine();
             Validation.validateStudentNumber(studentNum);
 
-            System.out.println("Entry Year: ");
-            String entryYear = scanner.nextLine();
-            int year = Integer.parseInt(entryYear);
+            System.out.println("Entry Date:(exp. 2021-01-23) ");
+            String entry = scanner.nextLine();
+            Date entryDate = formatter.parse(entry);
 
             System.out.println("Degree Type: ");
             String degreeType = scanner.nextLine();
             DegreeType degreeType1 = DegreeType.valueOf(degreeType);
 
             UniversityInfo universityInfo = new UniversityInfo(null, studentNum, uniName, universityType
-                    , year, degreeType1);
+                    , entryDate, degreeType1);
 
             System.out.println("Password: ");
             String pass = scanner.nextLine();
@@ -195,7 +196,8 @@ public class StudentLoanSystem {
     public void registerForLoan() {
         //paymentService.checkRegistrationDate(TODAY_DATE);
         paymentService.checkRegistrationDate(DateUtil.getToday());
-        studentService.isGraduated(student);
+        if(studentService.isGraduated(student))
+            throw new GraduationException("You Are Graduated and Can't Register For A Loan");
         System.out.println("Press 1 --> Education Loan");
         System.out.println("Press 2 --> Tuition Loan");
         System.out.println("Press 3 --> Housing Loan ");
