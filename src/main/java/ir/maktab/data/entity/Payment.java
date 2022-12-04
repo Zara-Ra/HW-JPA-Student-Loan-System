@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -48,16 +49,4 @@ public class Payment {
         this.loan = loan;
         this.degreeType = degreeType;
     }
-
-    @Override
-    public String toString() {
-        return "Loan Payment{" +
-                "Username:" + student.getName() + " " + student.getFamilyName() +
-                ", Loan:" + loan.toString() +
-                ", paidDate:" + paidDate +
-                ", degreeType:" + degreeType +
-                ", creditCard:" + creditCard +
-                '}';
-    }
-
 }

@@ -10,6 +10,7 @@ import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.UniversityType;
+import ir.maktab.repository.RepaymentRepo;
 import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
 import ir.maktab.service.StudentService;
@@ -34,13 +35,14 @@ public class StudentLoanSystem {
     public static final StudentService studentService = StudentService.getInstance();
     public static final PaymentService paymentService = PaymentService.getInstance();
     public static final LoanService loanService = LoanService.getInstance();
+    public static final RepaymentRepo repaymentRepo = RepaymentRepo.getInstance();//todo change it to repaymentService
     private Student student;
 
     public void firstMenu() {
         System.out.println("Press 1 --> Sign Up");
         System.out.println("Press 2 --> Sign In");
         System.out.println("Press 3  --> Sign Out");
-        System.out.println("Press any Key to Exit");
+        System.out.println("Press Any Key To Exit");
         System.out.println(DIVIDER);
         int choice = 0;
         try {
@@ -73,7 +75,7 @@ public class StudentLoanSystem {
     private void secondMenu() {
         System.out.println("Press 1 --> Register For Loan");
         System.out.println("Press 2 --> Repay Loan");
-        System.out.println("Press any Key to Exit");
+        System.out.println("Press Any Key To Exit");
         System.out.println(DIVIDER);
         int choice = 0;
         try {
@@ -194,14 +196,14 @@ public class StudentLoanSystem {
     }
 
     public void registerForLoan() {
-        //paymentService.checkRegistrationDate(TODAY_DATE);
         paymentService.checkRegistrationDate(DateUtil.getToday());
         if(studentService.isGraduated(student))
             throw new GraduationException("You Are Graduated and Can't Register For A Loan");
+        System.out.println("-------Register For Loan---------");
         System.out.println("Press 1 --> Education Loan");
         System.out.println("Press 2 --> Tuition Loan");
         System.out.println("Press 3 --> Housing Loan ");
-        System.out.println("Press any key --> Back");
+        System.out.println("Press Any Key --> Back");
         System.out.println(DIVIDER);
         int choice = 0;
         Loan loan;
@@ -298,10 +300,40 @@ public class StudentLoanSystem {
 
         return new CreditCard(null, card, cvv2, date);
     }
-
-
     public void repayLoan() {
+        if (!studentService.isGraduated(student)) {
+            throw new GraduationException("You Are Not Graduated And Can't Repay Your Loans");
+        }
+        System.out.println("-------Repay Loan-------");
+        System.out.println("Press 1 --> Show Paid");
+        System.out.println("Press 2 --> Show Unpaid");
+        System.out.println("Press 3 --> Repay");
+        System.out.println("Press any Key --> Back");
+        System.out.println(DIVIDER);
+        int choice = 0;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1 -> {
 
+                    student.getPaymentList().forEach(payment -> {
+                        repaymentRepo.getAll(payment).forEach(repayment -> {
+                            if(repayment.isPaid()) System.out.println(repayment);
+                        });});
+                }
+                case 2 ->{
+                    student.getPaymentList().forEach(payment -> {
+                        repaymentRepo.getAll(payment).forEach(repayment -> {
+                            if(!repayment.isPaid()) System.out.println(repayment);
+                        });});
+                }
+                case 3 ->{
+
+                }
+                default -> throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            secondMenu();
+        }
     }
-
 }

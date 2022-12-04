@@ -28,8 +28,11 @@ public class StudentServiceTest {
     public void signUpTest(){
         AccountInfo accountInfo = new AccountInfo(null,"0080218725", "aA1@zzzz");
 
+        LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
+        Date entry = DateUtil.localDateTimeToDate(localDate1);
+
         UniversityInfo universityInfo = new UniversityInfo(null,"810185193", "Tehran University"
-                , UniversityType.PRIVATE, 2021, DegreeType.BACHELOR);
+                , UniversityType.PRIVATE, entry, DegreeType.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(1988, 2, 26, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);

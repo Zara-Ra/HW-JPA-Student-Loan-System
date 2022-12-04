@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Student extends Person implements Serializable {
@@ -23,6 +24,7 @@ public class Student extends Person implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     UniversityInfo universityInfo;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)
     List<Payment> paymentList = new ArrayList<>();
 

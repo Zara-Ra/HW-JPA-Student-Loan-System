@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class AccountInfo implements Serializable {
@@ -18,6 +19,6 @@ public class AccountInfo implements Serializable {
     Long id;
     @Column(nullable = false, unique = true, updatable = false)
     String username;
-    @Column(nullable = false)//todo test this length length = 8
+    @Column(nullable = false)
     String password;
 }

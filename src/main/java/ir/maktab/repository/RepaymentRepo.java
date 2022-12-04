@@ -44,10 +44,12 @@ public class RepaymentRepo {
         em.close();
     }
 
-    public List<Repayment> getAll() {
+    public List<Repayment> getAll(Payment payment) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        List<Repayment> repaymentList = em.createQuery("FROM Repayment ").getResultList();
+        Query query = em.createQuery("FROM Repayment r WHERE r.payment=:payment");
+        query.setParameter("payment",payment);
+        List<Repayment> repaymentList = query.getResultList();
         em.getTransaction().commit();
         em.close();
         return repaymentList;

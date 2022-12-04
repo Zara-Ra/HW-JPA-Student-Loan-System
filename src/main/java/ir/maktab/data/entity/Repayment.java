@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@ToString isPaid=false we need number and amount and date,isPaid=true we need number and date
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Repayment {
@@ -19,10 +19,17 @@ public class Repayment {
     Long id;
     @ManyToOne
     Payment payment;
-    int repaymentNum;//1-60
+    int repaymentNum;
     double amount;
     @Temporal(value = TemporalType.TIMESTAMP)
     Date dueDate;
-    boolean isPaid = false;
+    boolean isPaid;
 
+    @Override
+    public String toString() {
+        if (isPaid)
+            return repaymentNum + "- " + dueDate;
+        else
+            return repaymentNum + "- " + dueDate + " " + amount;
+    }
 }

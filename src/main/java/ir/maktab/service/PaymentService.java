@@ -39,7 +39,7 @@ public class PaymentService {
                 if (i != 0 || j != 0) {
                     repayDate = DateUtil.addMonthToDate(repayDate);
                 }
-                Repayment repayment = new Repayment(null, payment, repayNum++, eachMonthRepaymentAmount, repayDate,
+                Repayment repayment = new Repayment(null, payment, ++repayNum, eachMonthRepaymentAmount, repayDate,
                         false);
                 payment.getRepaymentList().add(repayment);
             }

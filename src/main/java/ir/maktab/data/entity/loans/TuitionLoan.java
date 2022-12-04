@@ -38,4 +38,5 @@ public class TuitionLoan extends Loan {
         super(repayType);
         this.degreeGroup = degreeGroup;
     }
+
 }
