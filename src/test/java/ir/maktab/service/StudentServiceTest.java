@@ -82,6 +82,26 @@ public class StudentServiceTest {
     }
     @Order(5)
     @Test
+    public void signUpTestSpouseWithoutAnyPayment() {
+        AccountInfo accountInfo = new AccountInfo(null, "0442521677", "aA1@zzzz");
+
+        LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
+        Date entry = DateUtil.localDateTimeToDate(localDate1);
+
+        UniversityInfo universityInfo = new UniversityInfo(null, "810185199", "Sharif University"
+                , UniversityType.CAMPUS, entry, DegreeType.DISCONTINUOUS_MASTER);
+
+        LocalDateTime localDate = LocalDateTime.of(2000, 9, 29, 0, 0);
+        Date birth = DateUtil.localDateTimeToDate(localDate);
+
+        Student spouse = new Student(null, "Ala", "Hosseini", "Zahra", "Esmaeil"
+                , "12346", "0442521677", birth, false, false, City.OTHER
+                , null, accountInfo, universityInfo);
+
+        studentService.singUp(spouse);
+    }
+    @Order(6)
+    @Test
     public void isGraduatedTest(){
         LocalDateTime localDate1 = LocalDateTime.of(2000, 2, 26, 0, 0);
         Date entry = DateUtil.localDateTimeToDate(localDate1);
@@ -99,7 +119,7 @@ public class StudentServiceTest {
         assertTrue(studentService.isGraduated(student));
     }
 
-    @Order(6)
+    @Order(7)
     @Test
     public void isNotGraduatedTest(){
         LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
@@ -117,14 +137,14 @@ public class StudentServiceTest {
 
         assertFalse(studentService.isGraduated(student));
     }
-    @Order(7)
+    @Order(8)
     @Test
     public void signInTest() {
         Optional<Student> optionalStudent = studentService.signIn("0080218725", "aA1@zzzz");
         student = optionalStudent.get();
         assertTrue(optionalStudent.isPresent());
     }
-    @Order(8)
+    @Order(9)
     @Test
     public void hasPreviousLoanPaymentTest(){
         Loan loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
@@ -133,7 +153,7 @@ public class StudentServiceTest {
         paymentService.registerPayment(payment);
         assertTrue(studentService.hasPreviousLoanPayment(student,payment));
     }
-    @Order(9)
+    @Order(10)
     @Test
     public void hasPreviousLoanPaymentForHousingLoanTest(){
         Loan loan = loanService.getHousingLoan(student.getCity().type);
