@@ -2,7 +2,6 @@ package ir.maktab.repository;
 
 import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Student;
-import ir.maktab.data.entity.user.UniversityInfo;
 
 import javax.persistence.EntityManager;
 

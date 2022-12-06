@@ -25,11 +25,11 @@ public class Student extends Person implements Serializable {
     UniversityInfo universityInfo;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     List<Payment> paymentList = new ArrayList<>();
 
     public Student(Long id, String name, String familyName, String mothersName, String fathersName, String birthCertificateNum, String nationalNum, Date birthdate, boolean isMarried, boolean liveInDorm, City city, String houseContractNum, AccountInfo accountInfo, UniversityInfo universityInfo) {
-        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm,city, houseContractNum);
+        super(id, name, familyName, mothersName, fathersName, birthCertificateNum, nationalNum, birthdate, isMarried, liveInDorm, city, houseContractNum);
         this.accountInfo = accountInfo;
         this.universityInfo = universityInfo;
     }
@@ -37,7 +37,7 @@ public class Student extends Person implements Serializable {
     @Override
     public String toString() {
         return "Student{" +
-                "Name="+ super.name +" "+super.familyName+
+                "Name=" + super.name + " " + super.familyName +
                 ", Student number=" + universityInfo.getStudentNum() +
                 '}';
     }

@@ -62,7 +62,8 @@ public class StudentRepo {
     }
 
     public Optional<Student> getByUserNameAndPassword(String username, String password) {
-        Student person=null;
+
+            Student person;
         try {
             EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
             em.getTransaction().begin();
@@ -72,7 +73,8 @@ public class StudentRepo {
             person = (Student) query.getSingleResult();
             em.getTransaction().commit();
             em.close();
-        }catch (NoResultException e){
+        } catch (NoResultException e){
+            person = null;
         }
         return Optional.ofNullable(person);
     }

@@ -23,13 +23,16 @@ public class LoanService {
     public void addLoan(Loan loan) {
         loanRepo.save(loan);
     }
-    public EducationLoan getEducationLoan(DegreeGroup degreeGroup){
+
+    public EducationLoan getEducationLoan(DegreeGroup degreeGroup) {
         return loanRepo.getEducationLoanByDegree(degreeGroup);
     }
-    public TuitionLoan getTuitionLoan(DegreeGroup degreeGroup){
+
+    public TuitionLoan getTuitionLoan(DegreeGroup degreeGroup) {
         return loanRepo.getTuitionLoanByDegree(degreeGroup);
     }
-    public HousingLoan getHousingLoan(CityType cityType){
+
+    public HousingLoan getHousingLoan(CityType cityType) {
         return loanRepo.getHouseLoanByCity(cityType);
     }
 

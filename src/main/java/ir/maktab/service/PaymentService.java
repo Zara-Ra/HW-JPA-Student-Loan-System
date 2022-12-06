@@ -44,7 +44,9 @@ public class PaymentService {
                 payment.getRepaymentList().add(repayment);
             }
         }
+        payment.setPaidDate(DateUtil.getToday());
         paymentRepo.save(payment);
+        payment.getStudent().getPaymentList().add(payment);
     }
 
     private double firstYearRepaymentAmount(double totalLoanAmount, int repayYears, double interestRate) {
@@ -62,13 +64,11 @@ public class PaymentService {
                     "Of Aban And Last Week of Bahman)");
     }
 
-    public boolean checkSpouseConditions(Student student, Person person) {
-        List<Payment> listOfPayments = paymentRepo.findByNationalNumber(person);
+    public boolean checkSpouseConditions(Student student, Person spouse) {
+        List<Payment> listOfPayments = paymentRepo.findByNationalNumber(spouse);
         if (listOfPayments.size() == 0)
             return true;
-        return listOfPayments.stream().anyMatch(p -> {
-            return !(p.getLoan() instanceof HousingLoan);
-        });
+        return listOfPayments.stream().anyMatch(p -> !(p.getLoan() instanceof HousingLoan));
         //todo if spouse has previous housing payments doesn't give payment to student,it doesnt check the date
     }
 }

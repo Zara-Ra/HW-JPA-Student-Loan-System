@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -30,8 +29,8 @@ public class Payment {
     Loan loan;
 
     @EqualsAndHashCode.Exclude
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @Temporal(value = TemporalType.TIMESTAMP) //changed it for hasPreviousLoanPayment student service
+    //@CreationTimestamp
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -41,12 +40,17 @@ public class Payment {
     CreditCard creditCard;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.MERGE)// fetch ??
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.MERGE)
     List<Repayment> repaymentList = new ArrayList<>();
 
     public Payment(Student student, Loan loan, DegreeType degreeType) {
         this.student = student;
         this.loan = loan;
         this.degreeType = degreeType;
+    }
+
+    @Override
+    public String toString() {
+        return "***Payment: " + student.getName() + " " + student.getFamilyName() + " " + loan.getClass().getSimpleName() + "***";
     }
 }

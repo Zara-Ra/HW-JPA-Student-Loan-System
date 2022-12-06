@@ -1,5 +1,6 @@
 package ir.maktab.data.entity;
 
+import ir.maktab.util.date.DateUtil;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -28,8 +29,8 @@ public class Repayment {
     @Override
     public String toString() {
         if (isPaid)
-            return repaymentNum + "- " + dueDate;
+            return repaymentNum + "- " + DateUtil.dateWithoutTime(dueDate);
         else
-            return repaymentNum + "- " + dueDate + " " + amount;
+            return repaymentNum + "- " + DateUtil.dateWithoutTime(dueDate) + " " + amount;
     }
 }

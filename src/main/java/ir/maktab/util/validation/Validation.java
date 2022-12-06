@@ -27,16 +27,17 @@ public class Validation {
         if (!isNationalCodeValid(code))
             throw new ValidationException("Invalid National Code");
     }
-    private static boolean isNationalCodeValid(String code){
+
+    private static boolean isNationalCodeValid(String code) {
         int sum = 0;
         char[] chars = code.toCharArray();
-        for (int i = 10; i >=2 ; i--) {
-            int temp = Character.getNumericValue(chars[10-i]) * i;
+        for (int i = 10; i >= 2; i--) {
+            int temp = Character.getNumericValue(chars[10 - i]) * i;
             sum += temp;
         }
         int controlDigit = Character.getNumericValue(chars[9]);
         int mod = sum % 11;
-        if(mod < 2)
+        if (mod < 2)
             return controlDigit == mod;
         else
             return controlDigit == 11 - mod;
@@ -64,12 +65,11 @@ public class Validation {
         for (int i = 0; i < 16; i++) {
             int numericValue = Character.getNumericValue(chars[i]);
             if (i % 2 == 0) {
-                numericValue = numericValue *2;
-                if(numericValue > 9)
+                numericValue = numericValue * 2;
+                if (numericValue > 9)
                     numericValue -= 9;
-                sum += numericValue;
-            }
-            else
+                    sum += numericValue;
+            } else
                 sum += numericValue;
         }
         return sum % 10 == 0;
@@ -80,10 +80,15 @@ public class Validation {
         validate.accept(cvv, "^([0-9]){4}$", "Invalid cvv2 (4 Digits Accepted)");
     }
 
-    public static Date validateExpDate(String date) throws ParseException {
+    public static Date validateExpDate(String date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateFormat = formatter.parse(date);
-        if(!DateUtil.isDateValid(dateFormat))
+        Date dateFormat;
+        try {
+            dateFormat = formatter.parse(date);
+        } catch (ParseException e) {
+            throw new ValidationException("Invalid Date Format");
+        }
+        if (!DateUtil.isDateValid(dateFormat))
             throw new ValidationException("Card Has Expired");
         return dateFormat;
     }

@@ -6,12 +6,11 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.Date;
 
 public class DateUtil {
-    public static final Date ASSUMED_TODAY_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
-    public static final Date ASSUMED_TODAY_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
+    private static final Date ASSUMED_TODAY_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
+    private static final Date ASSUMED_TODAY_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
     public static final Date TODAY_DATE = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
     private static final int DAYS_OF_WEEK = 7;
@@ -21,9 +20,10 @@ public class DateUtil {
     private static final LocalDateTime SECOND_RANGE_START = LocalDateTime.of(2023, 2, 14, 0, 0);
     private static final LocalDateTime SECOND_RANGE_END = LocalDateTime.of(2023, 2, 20, 23, 59);
 
-    public static Date getToday(){
+    public static Date getToday() {
         return ASSUMED_TODAY_1;
     }
+
     public static Date localDateTimeToDate(LocalDateTime localDateTime) {
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
@@ -51,15 +51,15 @@ public class DateUtil {
         return daysBetween < DAYS_OF_WEEK;
     }
 
-    public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, DegreeType degreeType){
+    public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, DegreeType degreeType) {
         long daysBetween = Math.abs(numberOfDaysBetween(firstDate, secondDate));
         long graduationInDays = degreeType.getGraduationInDays();
         return graduationInDays > daysBetween;
     }
 
-    public static boolean isDateValid(Date date){
+    public static boolean isDateValid(Date date) {
         LocalDateTime testDate = dateToLocalDateTime(date);
-        return testDate.isAfter(LocalDateTime.now());
+        return testDate.isAfter(dateToLocalDateTime(getToday()));
     }
 
     public static Date addYearsToDate(Date date, int years) {
@@ -78,5 +78,10 @@ public class DateUtil {
         LocalDateTime inputDate = dateToLocalDateTime(date);
         LocalDateTime resultDate = inputDate.plusMonths(1);
         return localDateTimeToDate(resultDate);
+    }
+
+    public static String dateWithoutTime(Date dueDate) {
+        LocalDateTime localDateTime = DateUtil.dateToLocalDateTime(dueDate);
+        return localDateTime.getYear() + "/" + localDateTime.getMonthValue() + "/" + localDateTime.getDayOfMonth();
     }
 }

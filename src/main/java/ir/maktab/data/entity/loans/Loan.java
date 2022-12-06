@@ -24,22 +24,18 @@ public class Loan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    /*@Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    LoanType loanType;
-    */
-    @EqualsAndHashCode.Include
+    //@EqualsAndHashCode.Include
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     RepayType repayType;
     double amount;
-
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "loan")
     List<Payment> paymentList = new ArrayList<>();
 
     public Loan(RepayType repayType) {
-        this.repayType=repayType;
+        this.repayType = repayType;
     }
 
     public Loan(RepayType repayType, double amount) {

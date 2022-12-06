@@ -2,6 +2,7 @@ package ir.maktab.presentation;
 
 import ir.maktab.data.entity.CreditCard;
 import ir.maktab.data.entity.Payment;
+import ir.maktab.data.entity.Repayment;
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Person;
@@ -10,9 +11,9 @@ import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.DegreeType;
 import ir.maktab.data.enums.UniversityType;
-import ir.maktab.repository.RepaymentRepo;
 import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
+import ir.maktab.service.RepaymentService;
 import ir.maktab.service.StudentService;
 import ir.maktab.util.date.DateUtil;
 import ir.maktab.util.exceptions.GraduationException;
@@ -35,7 +36,7 @@ public class StudentLoanSystem {
     public static final StudentService studentService = StudentService.getInstance();
     public static final PaymentService paymentService = PaymentService.getInstance();
     public static final LoanService loanService = LoanService.getInstance();
-    public static final RepaymentRepo repaymentRepo = RepaymentRepo.getInstance();//todo change it to repaymentService
+    public static final RepaymentService repaymentService = RepaymentService.getInstance();
     private Student student;
 
     public void firstMenu() {
@@ -60,11 +61,8 @@ public class StudentLoanSystem {
                     signIn();
                     secondMenu();
                 }
-                case 3 -> {
-                }
-                default -> {
-                    exit(0);
-                }
+                case 3 -> signOut();
+                default -> exit(0);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -75,13 +73,13 @@ public class StudentLoanSystem {
     private void secondMenu() {
         System.out.println("Press 1 --> Register For Loan");
         System.out.println("Press 2 --> Repay Loan");
-        System.out.println("Press Any Key To Exit");
+        System.out.println("Press Any Key --> Back");
         System.out.println(DIVIDER);
         int choice = 0;
         try {
             choice = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            exit(0);
+            firstMenu();
         }
         try {
             switch (choice) {
@@ -93,9 +91,7 @@ public class StudentLoanSystem {
                     repayLoan();
                     secondMenu();
                 }
-                default -> {
-                    exit(0);
-                }
+                default -> firstMenu();
             }
         } catch (NotInDateRangeException | GraduationException e) {
             System.err.println(e.getMessage());
@@ -195,9 +191,13 @@ public class StudentLoanSystem {
         student = signInStudent.orElseThrow(() -> new RuntimeException("Invalid Username/Password"));
     }
 
+    private void signOut() {
+        student = null;
+    }
+
     public void registerForLoan() {
         paymentService.checkRegistrationDate(DateUtil.getToday());
-        if(studentService.isGraduated(student))
+        if (studentService.isGraduated(student))
             throw new GraduationException("You Are Graduated and Can't Register For A Loan");
         System.out.println("-------Register For Loan---------");
         System.out.println("Press 1 --> Education Loan");
@@ -205,7 +205,7 @@ public class StudentLoanSystem {
         System.out.println("Press 3 --> Housing Loan ");
         System.out.println("Press Any Key --> Back");
         System.out.println(DIVIDER);
-        int choice = 0;
+        int choice;
         Loan loan;
         Payment payment = null;
         boolean hasPayment = true;
@@ -246,7 +246,7 @@ public class StudentLoanSystem {
             }
         } catch (NumberFormatException e) {
             secondMenu();
-        } catch (ValidationException | ParseException e) {
+        } catch (ValidationException e) {
             System.err.println(e.getMessage());
             secondMenu();
         }
@@ -285,7 +285,7 @@ public class StudentLoanSystem {
         return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
     }
 
-    private CreditCard getCreditCardInfo() throws ParseException {
+    private CreditCard getCreditCardInfo() {
         System.out.println("Enter Your 16 Digit Card Number(Melli,Maskan,Tejarat,Refah):");
         String card = scanner.nextLine();
         Validation.validateCardNumber(card);
@@ -300,6 +300,7 @@ public class StudentLoanSystem {
 
         return new CreditCard(null, card, cvv2, date);
     }
+
     public void repayLoan() {
         if (!studentService.isGraduated(student)) {
             throw new GraduationException("You Are Not Graduated And Can't Repay Your Loans");
@@ -310,30 +311,49 @@ public class StudentLoanSystem {
         System.out.println("Press 3 --> Repay");
         System.out.println("Press any Key --> Back");
         System.out.println(DIVIDER);
-        int choice = 0;
+        int choice;
         try {
             choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
-                case 1 -> {
-
-                    student.getPaymentList().forEach(payment -> {
-                        repaymentRepo.getAll(payment).forEach(repayment -> {
-                            if(repayment.isPaid()) System.out.println(repayment);
-                        });});
-                }
-                case 2 ->{
-                    student.getPaymentList().forEach(payment -> {
-                        repaymentRepo.getAll(payment).forEach(repayment -> {
-                            if(!repayment.isPaid()) System.out.println(repayment);
-                        });});
-                }
-                case 3 ->{
-
+                case 1 -> student.getPaymentList().forEach(payment -> {
+                    System.out.println(payment);
+                    repaymentService.getAllForPayment(payment).stream().filter(r -> r.isPaid())
+                            .forEach(System.out::println);
+                });
+                case 2 -> student.getPaymentList().forEach(payment -> {
+                    System.out.println(payment);
+                    repaymentService.getAllForPayment(payment).stream().filter(r -> !r.isPaid())
+                            .forEach(System.out::println);
+                });
+                case 3 -> {
+                    for (int i = 0; i < student.getPaymentList().size(); i++) {
+                        System.out.println(i + 1 + " " + student.getPaymentList().get(i));
+                    }
+                    System.out.println("Enter Payment To Repay:");
+                    String num = scanner.nextLine();
+                    int paymentNo = Integer.parseInt(num);
+                    paymentNo--;
+                    Payment paymentToRepay = student.getPaymentList().get(paymentNo);
+                    CreditCard newCreditCard = getCreditCardInfo();
+                    if (paymentToRepay.getCreditCard().equals(newCreditCard)) {
+                        Repayment repayment = repaymentService.getAllForPayment(paymentToRepay)
+                                .stream().filter(r -> !r.isPaid()).findFirst().orElseThrow();
+                        repayment.setPaid(true);
+                        repaymentService.update(repayment);
+                    } else {
+                        System.out.println("Wrong Credit Card");
+                    }
                 }
                 default -> throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            secondMenu();
+            //secondMenu();
+        } catch (ValidationException e) {
+            System.err.println(e.getMessage());
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Invalid Payment Number");
+        } catch (NullPointerException e) {
+            System.err.println("You Have Repaid This Loan Completely");
         }
     }
 }

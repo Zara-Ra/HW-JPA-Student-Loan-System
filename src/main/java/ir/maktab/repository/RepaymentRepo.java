@@ -2,8 +2,6 @@ package ir.maktab.repository;
 
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.Repayment;
-import ir.maktab.data.entity.loans.Loan;
-import ir.maktab.data.entity.user.Student;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -38,7 +36,7 @@ public class RepaymentRepo {
     public void delete(Repayment repayment) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        Repayment deletePayment = em.find(Repayment.class,repayment.getId());
+        Repayment deletePayment = em.find(Repayment.class, repayment.getId());
         em.remove(deletePayment);
         em.getTransaction().commit();
         em.close();
@@ -48,7 +46,7 @@ public class RepaymentRepo {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM Repayment r WHERE r.payment=:payment");
-        query.setParameter("payment",payment);
+        query.setParameter("payment", payment);
         List<Repayment> repaymentList = query.getResultList();
         em.getTransaction().commit();
         em.close();
@@ -64,10 +62,12 @@ public class RepaymentRepo {
         return repayment;
     }
 
-    public Repayment getByNumber(int num){
+    public Repayment getByNumber(int num) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        Repayment repayment = (Repayment) em.createQuery("FROM Repayment r WHERE r.repaymentNum=:num").getSingleResult();
+        Query query = em.createQuery("FROM Repayment r WHERE r.repaymentNum=:num");
+        query.setParameter("num",num);
+        Repayment repayment = (Repayment) query.getSingleResult();
         em.getTransaction().commit();
         em.close();
         return repayment;

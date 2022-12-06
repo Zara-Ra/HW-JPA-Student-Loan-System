@@ -1,7 +1,6 @@
 package ir.maktab.repository;
 
 import ir.maktab.data.entity.CreditCard;
-import ir.maktab.data.entity.Repayment;
 
 import javax.persistence.EntityManager;
 
@@ -34,13 +33,13 @@ public class CreditCardRepo {
     public void delete(CreditCard creditCard) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        CreditCard deleteCard = em.find(CreditCard.class,creditCard.getId());
+        CreditCard deleteCard = em.find(CreditCard.class, creditCard.getId());
         em.remove(deleteCard);
         em.getTransaction().commit();
         em.close();
     }
 
-    public CreditCard getByCardNumber(String cardNumber){
+    public CreditCard getByCardNumber(String cardNumber) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         CreditCard creditCard = (CreditCard) em.createQuery("FROM CreditCard c WHERE c.cardNum=:cardNumber").getSingleResult();

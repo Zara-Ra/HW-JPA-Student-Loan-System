@@ -63,7 +63,8 @@ public class LoanRepo {
         em.close();
         return loan;
     }
-    public EducationLoan getEducationLoanByDegree(DegreeGroup degree){
+
+    public EducationLoan getEducationLoanByDegree(DegreeGroup degree) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM EducationLoan e WHERE e.degreeGroup=:degree");
@@ -72,7 +73,8 @@ public class LoanRepo {
         em.close();
         return loan;
     }
-    public TuitionLoan getTuitionLoanByDegree(DegreeGroup degree){
+
+    public TuitionLoan getTuitionLoanByDegree(DegreeGroup degree) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM TuitionLoan t WHERE t.degreeGroup=:degree");
@@ -81,7 +83,8 @@ public class LoanRepo {
         em.close();
         return loan;
     }
-    public HousingLoan getHouseLoanByCity(CityType city){
+
+    public HousingLoan getHouseLoanByCity(CityType city) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM HousingLoan h WHERE h.cityType=:city");

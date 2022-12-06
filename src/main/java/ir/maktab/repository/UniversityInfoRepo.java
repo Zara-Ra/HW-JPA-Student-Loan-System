@@ -6,13 +6,13 @@ import ir.maktab.data.entity.user.UniversityInfo;
 import javax.persistence.EntityManager;
 
 public class UniversityInfoRepo {
-    private static final UniversityInfoRepo unversityInfoRepo = new UniversityInfoRepo();
+    private static final UniversityInfoRepo universityInfoRepo = new UniversityInfoRepo();
 
     private UniversityInfoRepo() {
     }
 
     public static UniversityInfoRepo getInstance() {
-        return unversityInfoRepo;
+        return universityInfoRepo;
     }
 
     public void save(UniversityInfo universityInfo) {
