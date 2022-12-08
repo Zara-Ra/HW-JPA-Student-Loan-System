@@ -6,10 +6,13 @@ import ir.maktab.data.entity.user.AccountInfo;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
-import ir.maktab.data.enums.DegreeType;
+import ir.maktab.data.enums.Degree;
 import ir.maktab.data.enums.UniversityType;
 import ir.maktab.util.date.DateUtil;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -17,8 +20,7 @@ import java.util.Optional;
 
 import static ir.maktab.presentation.StudentLoanSystem.loanService;
 import static ir.maktab.presentation.StudentLoanSystem.paymentService;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentServiceTest {
@@ -34,7 +36,7 @@ public class StudentServiceTest {
         Date entry = DateUtil.localDateTimeToDate(localDate1);
 
         UniversityInfo universityInfo = new UniversityInfo(null, "810185193", "Tehran University"
-                , UniversityType.PRIVATE, entry, DegreeType.BACHELOR);
+                , UniversityType.PRIVATE, entry, Degree.BACHELOR);
 
         LocalDateTime localDate = LocalDateTime.of(1988, 2, 26, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
@@ -69,27 +71,28 @@ public class StudentServiceTest {
         Date entry = DateUtil.localDateTimeToDate(localDate1);
 
         UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
-                , UniversityType.CAMPUS, entry, DegreeType.DISCONTINUOUS_MASTER);
+                , UniversityType.CAMPUS, entry, Degree.DISCONTINUOUS_MASTER);
 
         LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
 
-        Student spouse = new Student(null, "Esmaeil", "Hosseini", "Maryam", "Mohsen"
+        Student spouse = new Student(null, "Mohammad", "Hosseini", "Maryam", "Mohsen"
                 , "12345", "0081790171", birth, false, false, City.RASHT
                 , null, accountInfo, universityInfo);
 
         studentService.singUp(spouse);
     }
+
     @Order(5)
     @Test
     public void signUpTestSpouseWithoutAnyPayment() {
-        AccountInfo accountInfo = new AccountInfo(null, "0442521677", "aA1@zzzz");
+        AccountInfo accountInfo = new AccountInfo(null, "0441967205", "aA1@zzzz");
 
         LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
         Date entry = DateUtil.localDateTimeToDate(localDate1);
 
         UniversityInfo universityInfo = new UniversityInfo(null, "810185199", "Sharif University"
-                , UniversityType.CAMPUS, entry, DegreeType.DISCONTINUOUS_MASTER);
+                , UniversityType.CAMPUS, entry, Degree.DISCONTINUOUS_MASTER);
 
         LocalDateTime localDate = LocalDateTime.of(2000, 9, 29, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
@@ -100,14 +103,15 @@ public class StudentServiceTest {
 
         studentService.singUp(spouse);
     }
+
     @Order(6)
     @Test
-    public void isGraduatedTest(){
+    public void isGraduatedTest() {
         LocalDateTime localDate1 = LocalDateTime.of(2000, 2, 26, 0, 0);
         Date entry = DateUtil.localDateTimeToDate(localDate1);
 
         UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
-                , UniversityType.CAMPUS, entry, DegreeType.PHD);
+                , UniversityType.CAMPUS, entry, Degree.PHD);
 
         LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
@@ -121,12 +125,12 @@ public class StudentServiceTest {
 
     @Order(7)
     @Test
-    public void isNotGraduatedTest(){
+    public void isNotGraduatedTest() {
         LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
         Date entry = DateUtil.localDateTimeToDate(localDate1);
 
         UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
-                , UniversityType.CAMPUS, entry, DegreeType.PHD);
+                , UniversityType.CAMPUS, entry, Degree.PHD);
 
         LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
         Date birth = DateUtil.localDateTimeToDate(localDate);
@@ -137,6 +141,7 @@ public class StudentServiceTest {
 
         assertFalse(studentService.isGraduated(student));
     }
+
     @Order(8)
     @Test
     public void signInTest() {
@@ -144,22 +149,92 @@ public class StudentServiceTest {
         student = optionalStudent.get();
         assertTrue(optionalStudent.isPresent());
     }
+
     @Order(9)
     @Test
-    public void hasPreviousLoanPaymentTest(){
+    public void hasPreviousLoanPaymentForTuitionLoanTest() {
         Loan loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
         Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-        assertFalse(studentService.hasPreviousLoanPayment(student,payment));
+        assertFalse(studentService.hasPreviousLoanPayment(student, payment));
         paymentService.registerPayment(payment);
-        assertTrue(studentService.hasPreviousLoanPayment(student,payment));
+        assertTrue(studentService.hasPreviousLoanPayment(student, payment));
     }
+
     @Order(10)
     @Test
-    public void hasPreviousLoanPaymentForHousingLoanTest(){
+    public void hasPreviousLoanPaymentForEducationLoanTest() {
+        Loan loan = loanService.getEducationLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
+        Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
+        assertFalse(studentService.hasPreviousLoanPayment(student, payment));
+        paymentService.registerPayment(payment);
+        assertTrue(studentService.hasPreviousLoanPayment(student, payment));
+    }
+
+    @Order(11)
+    @Test
+    public void hasPreviousLoanPaymentForHousingLoanTest() {
         Loan loan = loanService.getHousingLoan(student.getCity().type);
         Payment payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-        assertFalse(studentService.hasPreviousLoanPayment(student,payment));
+        assertFalse(studentService.hasPreviousLoanPayment(student, payment));
         paymentService.registerPayment(payment);
-        assertTrue(studentService.hasPreviousLoanPayment(student,payment));
+        assertTrue(studentService.hasPreviousLoanPayment(student, payment));
+    }
+
+    @Order(12)
+    @Test
+    public void InvalidTuitionLoanConditions() {
+        LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
+        Date entry = DateUtil.localDateTimeToDate(localDate1);
+
+        UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
+                , UniversityType.PUBLIC_DAILY, entry, Degree.PHD);
+
+        LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
+        Date birth = DateUtil.localDateTimeToDate(localDate);
+
+        Student student = new Student(null, "StudentOfPublicUni", "Hosseini", "Maryam", "Mohsen"
+                , "12345", "0081790171", birth, false, false, City.OTHER
+                , null, null, universityInfo);
+
+        assertFalse(studentService.checkTuitionLoanConditions(student));
+    }
+
+
+    @Order(13)
+    @Test
+    public void validTuitionLoanConditions() {
+        LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
+        Date entry = DateUtil.localDateTimeToDate(localDate1);
+
+        UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
+                , UniversityType.PAYAME_NOUR, entry, Degree.PHD);
+
+        LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
+        Date birth = DateUtil.localDateTimeToDate(localDate);
+
+        Student student = new Student(null, "StudentOfPayamNor", "Hosseini", "Maryam", "Mohsen"
+                , "12345", "0081790171", birth, false, false, City.OTHER
+                , null, null, universityInfo);
+
+        assertTrue(studentService.checkTuitionLoanConditions(student));
+    }
+
+    @Order(14)
+    @Test
+    public void calculateGraduationDateForPHDTest(){
+        LocalDateTime entry = LocalDateTime.of(2022, 1, 1, 0, 0);
+        Date entryDate = DateUtil.localDateTimeToDate(entry);
+
+        LocalDateTime graduation = LocalDateTime.of(2027,1,1,0,0);
+        Date graduationDate = DateUtil.localDateTimeToDate(graduation);
+
+        UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
+                , UniversityType.PAYAME_NOUR, entryDate, Degree.PHD);
+
+        Student student = new Student(null, "CalculateGrad",null, null, "Mohsen"
+                , null, null, null, false, false, null
+                , null, null, universityInfo);
+
+        assertEquals(graduationDate,studentService.calculateGraduationDate(student));
     }
 }

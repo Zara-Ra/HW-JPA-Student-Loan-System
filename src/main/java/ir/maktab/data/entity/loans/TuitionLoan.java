@@ -20,6 +20,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class TuitionLoan extends Loan {
     @Enumerated(value = EnumType.STRING)
     DegreeGroup degreeGroup;

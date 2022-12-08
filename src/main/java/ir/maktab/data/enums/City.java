@@ -1,22 +1,20 @@
 package ir.maktab.data.enums;
 
 public enum City {
-    TEHRAN("Tehran", CityType.CAPITAL),
-    RASHT("Rasht", CityType.METROPOLIS),
-    ESFAHAN("Esfahan", CityType.METROPOLIS),
-    TABRIZ("Tabriz", CityType.METROPOLIS),
-    SHIRAZ("Shiraz", CityType.METROPOLIS),
-    AHVAZ("Ahvaz", CityType.METROPOLIS),
-    QOM("Qom", CityType.METROPOLIS),
-    MASHHAD("Mashhad", CityType.METROPOLIS),
-    KARAJ("Karaj", CityType.METROPOLIS),
-    OTHER("Other", CityType.OTHER);
+    TEHRAN(CityType.CAPITAL),
+    RASHT(CityType.METROPOLIS),
+    ESFAHAN(CityType.METROPOLIS),
+    TABRIZ(CityType.METROPOLIS),
+    SHIRAZ(CityType.METROPOLIS),
+    AHVAZ(CityType.METROPOLIS),
+    QOM(CityType.METROPOLIS),
+    MASHHAD(CityType.METROPOLIS),
+    KARAJ(CityType.METROPOLIS),
+    OTHER( CityType.OTHER);
 
-    private final String name;
     public final CityType type;
 
-    City(String name, CityType type) {
-        this.name = name;
+    City(CityType type) {
         this.type = type;
     }
 

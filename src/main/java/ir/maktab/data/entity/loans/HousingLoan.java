@@ -18,6 +18,7 @@ import javax.persistence.Enumerated;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class HousingLoan extends Loan {
     @Enumerated(value = EnumType.STRING)
     CityType cityType;

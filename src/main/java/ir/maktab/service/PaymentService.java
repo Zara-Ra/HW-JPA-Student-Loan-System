@@ -61,12 +61,6 @@ public class PaymentService {
         }
         return totalRepay / sum;
     }
-
-    public static void main(String[] args) {
-        double firstYearRepaymentAmount = paymentService.firstYearRepaymentAmount(3000000, 5, 0.04,0.2);
-        System.out.println(firstYearRepaymentAmount);
-    }
-
     public void checkRegistrationDate(Date date) {
         if (!DateUtil.isInRegistrationRange(date))
             throw new NotInDateRangeException("You Can Not Register For A Loan At This Date (Registration Time is First Week " +
@@ -77,7 +71,6 @@ public class PaymentService {
         List<Payment> listOfPayments = paymentRepo.findByNationalNumber(spouse);
         if (listOfPayments.size() == 0)
             return true;
-        //return listOfPayments.stream().anyMatch(p -> !(p.getLoan() instanceof HousingLoan));
         long count = listOfPayments.stream().filter(p -> (p.getLoan() instanceof HousingLoan)).count();
         return count == 0;
         //todo if spouse has previous housing payments doesn't give payment to student,it doesnt check the date

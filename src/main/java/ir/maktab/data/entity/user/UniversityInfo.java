@@ -1,6 +1,6 @@
 package ir.maktab.data.entity.user;
 
-import ir.maktab.data.enums.DegreeType;
+import ir.maktab.data.enums.Degree;
 import ir.maktab.data.enums.UniversityType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,5 +31,5 @@ public class UniversityInfo {
     Date entryDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    DegreeType degree;
+    Degree degree;
 }

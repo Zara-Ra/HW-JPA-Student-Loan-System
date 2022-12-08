@@ -3,6 +3,7 @@ package ir.maktab.service;
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.enums.RepayType;
+import ir.maktab.data.enums.UniversityType;
 import ir.maktab.repository.StudentRepo;
 import ir.maktab.util.date.DateUtil;
 
@@ -29,7 +30,9 @@ public class StudentService {
     public Optional<Student> signIn(String username, String password) {
         return studentRepo.getByUserNameAndPassword(username, password);
     }
-
+    public boolean checkTuitionLoanConditions(Student student) {
+        return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
+    }
     public boolean hasPreviousLoanPayment(Student student, Payment payment) {
         int i = student.getPaymentList().indexOf(payment);
         boolean flag = false;

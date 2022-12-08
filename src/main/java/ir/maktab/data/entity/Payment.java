@@ -2,10 +2,9 @@ package ir.maktab.data.entity;
 
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.user.Student;
-import ir.maktab.data.enums.DegreeType;
+import ir.maktab.data.enums.Degree;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class Payment {
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    DegreeType degreeType;
+    Degree degree;
     @EqualsAndHashCode.Exclude
     @OneToOne(cascade = CascadeType.MERGE)
     CreditCard creditCard;
@@ -43,10 +42,10 @@ public class Payment {
     @OneToMany(mappedBy = "payment", cascade = CascadeType.MERGE)
     List<Repayment> repaymentList = new ArrayList<>();
 
-    public Payment(Student student, Loan loan, DegreeType degreeType) {
+    public Payment(Student student, Loan loan, Degree degree) {
         this.student = student;
         this.loan = loan;
-        this.degreeType = degreeType;
+        this.degree = degree;
     }
 
     @Override

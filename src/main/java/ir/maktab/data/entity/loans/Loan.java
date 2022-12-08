@@ -23,8 +23,8 @@ import java.util.List;
 public class Loan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Exclude
     Long id;
-    //@EqualsAndHashCode.Include
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     RepayType repayType;

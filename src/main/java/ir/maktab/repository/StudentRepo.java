@@ -19,11 +19,15 @@ public class StudentRepo {
     }
 
     public void save(Student student) {
-        EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(student);
-        em.getTransaction().commit();
-        em.close();
+        try {
+            EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
+            em.getTransaction().begin();
+            em.persist(student);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
     public void update(Student student) {
@@ -62,8 +66,7 @@ public class StudentRepo {
     }
 
     public Optional<Student> getByUserNameAndPassword(String username, String password) {
-
-            Student person;
+        Student person;
         try {
             EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
             em.getTransaction().begin();
@@ -73,7 +76,7 @@ public class StudentRepo {
             person = (Student) query.getSingleResult();
             em.getTransaction().commit();
             em.close();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             person = null;
         }
         return Optional.ofNullable(person);

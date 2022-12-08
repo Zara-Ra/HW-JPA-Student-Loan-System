@@ -9,7 +9,7 @@ import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.entity.user.UniversityInfo;
 import ir.maktab.data.enums.City;
-import ir.maktab.data.enums.DegreeType;
+import ir.maktab.data.enums.Degree;
 import ir.maktab.data.enums.UniversityType;
 import ir.maktab.service.LoanService;
 import ir.maktab.service.PaymentService;
@@ -20,6 +20,7 @@ import ir.maktab.util.exceptions.GraduationException;
 import ir.maktab.util.exceptions.NotInDateRangeException;
 import ir.maktab.util.exceptions.ValidationException;
 import ir.maktab.util.validation.Validation;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,10 +62,14 @@ public class StudentLoanSystem {
                     signIn();
                     secondMenu();
                 }
-                case 3 -> signOut();
+                case 3 -> {
+                    signOut();
+                    firstMenu();
+                }
                 default -> exit(0);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.err.println(e.getMessage());
             firstMenu();
         }
@@ -152,10 +157,10 @@ public class StudentLoanSystem {
 
             System.out.println("Degree Type: ");
             String degreeType = scanner.nextLine();
-            DegreeType degreeType1 = DegreeType.valueOf(degreeType);
+            Degree degree1 = Degree.valueOf(degreeType);
 
             UniversityInfo universityInfo = new UniversityInfo(null, studentNum, uniName, universityType
-                    , entryDate, degreeType1);
+                    , entryDate, degree1);
 
             System.out.println("Password: ");
             String pass = scanner.nextLine();
@@ -206,7 +211,7 @@ public class StudentLoanSystem {
         System.out.println("Press Any Key --> Back");
         System.out.println(DIVIDER);
         int choice;
-        Loan loan;
+        Loan loan=null;
         Payment payment = null;
         boolean hasPayment = true;
         boolean hasConditions = false;
@@ -220,7 +225,7 @@ public class StudentLoanSystem {
                     hasPayment = studentService.hasPreviousLoanPayment(student, payment);
                 }
                 case 2 -> {
-                    hasConditions = checkTuitionLoanConditions();
+                    hasConditions = studentService.checkTuitionLoanConditions(student);
                     if (hasConditions) {
                         loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                         payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
@@ -238,6 +243,7 @@ public class StudentLoanSystem {
             }
 
             if (!hasPayment && hasConditions) {
+                System.out.println(loan);
                 CreditCard creditCard = getCreditCardInfo();
                 payment.setCreditCard(creditCard);
                 paymentService.registerPayment(payment);
@@ -279,10 +285,6 @@ public class StudentLoanSystem {
         student.setHouseContractNum(scanner.nextLine());
         Person spouse = new Person(spouseName, spouseFamily, spouseNc);
         return paymentService.checkSpouseConditions(student, spouse);
-    }
-
-    private boolean checkTuitionLoanConditions() {
-        return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
     }
 
     private CreditCard getCreditCardInfo() {
@@ -347,7 +349,6 @@ public class StudentLoanSystem {
                 default -> throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            //secondMenu();
         } catch (ValidationException e) {
             System.err.println(e.getMessage());
         } catch (IndexOutOfBoundsException e) {

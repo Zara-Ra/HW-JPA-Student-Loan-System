@@ -1,6 +1,6 @@
 package ir.maktab.util.date;
 
-import ir.maktab.data.enums.DegreeType;
+import ir.maktab.data.enums.Degree;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -51,9 +51,9 @@ public class DateUtil {
         return daysBetween < DAYS_OF_WEEK;
     }
 
-    public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, DegreeType degreeType) {
+    public static boolean areDatesInSameGrade(Date firstDate, Date secondDate, Degree degree) {
         long daysBetween = Math.abs(numberOfDaysBetween(firstDate, secondDate));
-        long graduationInDays = degreeType.getGraduationInDays();
+        long graduationInDays = degree.getGraduationInDays();
         return graduationInDays > daysBetween;
     }
 
