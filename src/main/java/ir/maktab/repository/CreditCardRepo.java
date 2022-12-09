@@ -3,6 +3,7 @@ package ir.maktab.repository;
 import ir.maktab.data.entity.CreditCard;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class CreditCardRepo {
     private static final CreditCardRepo creditCardRepo = new CreditCardRepo();
@@ -42,7 +43,9 @@ public class CreditCardRepo {
     public CreditCard getByCardNumber(String cardNumber) {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        CreditCard creditCard = (CreditCard) em.createQuery("FROM CreditCard c WHERE c.cardNum=:cardNumber").getSingleResult();
+        Query query = em.createQuery("FROM CreditCard c WHERE c.cardNum=:cardNumber");
+        query.setParameter("cardNumber",cardNumber);
+        CreditCard creditCard = (CreditCard) query.getSingleResult();
         em.getTransaction().commit();
         em.close();
         return creditCard;

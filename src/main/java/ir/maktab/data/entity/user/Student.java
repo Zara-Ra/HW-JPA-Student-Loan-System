@@ -4,6 +4,7 @@ import ir.maktab.data.entity.Payment;
 import ir.maktab.data.enums.City;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;

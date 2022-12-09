@@ -14,6 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@NamedQueries(
+        @NamedQuery(name = "findCardByNumber", query = "FROM CreditCard c WHERE c.cardNum=:cardNumber")
+)
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

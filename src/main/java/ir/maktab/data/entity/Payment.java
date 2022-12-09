@@ -28,7 +28,7 @@ public class Payment {
     Loan loan;
 
     @EqualsAndHashCode.Exclude
-    @Temporal(value = TemporalType.TIMESTAMP) //changed it for hasPreviousLoanPayment student service
+    @Temporal(value = TemporalType.TIMESTAMP)
     //@CreationTimestamp
     Date paidDate;
     @Column(nullable = false)

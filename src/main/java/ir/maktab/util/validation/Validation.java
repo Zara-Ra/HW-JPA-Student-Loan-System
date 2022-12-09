@@ -68,7 +68,7 @@ public class Validation {
                 numericValue = numericValue * 2;
                 if (numericValue > 9)
                     numericValue -= 9;
-                    sum += numericValue;
+                sum += numericValue;
             } else
                 sum += numericValue;
         }

@@ -40,10 +40,15 @@ public class PaymentServiceTest {
     }
     @Order(4)
     @Test
-    void validSpouseConditionsTest() {
+    void validSpouseConditionsWithoutAnyPaymentTest() {
         Student student = studentService.signIn("0081790171","aA1@zzzz").get();
         Person spouse = new Person("Ala","Hosseini","0442521677");
         boolean hasCondition = paymentService.checkSpouseConditions(student, spouse);
         assertTrue(hasCondition);
+    }
+    @Order(5)
+    @Test
+    void validSpouseConditionsTestWithPaymentTest(){
+
     }
 }

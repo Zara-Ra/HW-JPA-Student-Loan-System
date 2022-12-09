@@ -3,7 +3,8 @@ package ir.maktab.data.entity;
 import ir.maktab.util.date.DateUtil;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,6 +15,8 @@ import java.util.Date;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Cacheable
+@Cache( usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Repayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

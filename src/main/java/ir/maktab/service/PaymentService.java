@@ -5,12 +5,14 @@ import ir.maktab.data.entity.Repayment;
 import ir.maktab.data.entity.loans.HousingLoan;
 import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
+import ir.maktab.data.enums.Degree;
 import ir.maktab.repository.PaymentRepo;
 import ir.maktab.util.date.DateUtil;
 import ir.maktab.util.exceptions.NotInDateRangeException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PaymentService {
     private static final int REPAY_YEARS = 5;
@@ -30,6 +32,12 @@ public class PaymentService {
     private final StudentService studentService = StudentService.getInstance();
 
     public void registerPayment(Payment payment) {
+        setRepayments(payment);
+        payment.setPaidDate(DateUtil.getToday());
+        payment.getStudent().getPaymentList().add(payment);
+        paymentRepo.save(payment);
+    }
+    public void setRepayments(Payment payment){
         double principal = payment.getLoan().getAmount();
         double firstYearRepaymentAmount = firstYearRepaymentAmount(principal, REPAY_YEARS, INTEREST_RATE,ANNUAL_INCREASE);
         int repayNum = 0;
@@ -45,11 +53,7 @@ public class PaymentService {
                 payment.getRepaymentList().add(repayment);
             }
         }
-        payment.setPaidDate(DateUtil.getToday());
-        paymentRepo.save(payment);
-        payment.getStudent().getPaymentList().add(payment);
     }
-
     private double firstYearRepaymentAmount(double principal,int repayYears,double interestRate,double annualIncrease){
         double totalRepay = principal + principal * interestRate;
         double numberOfMonths = MONTHS_OF_YEAR;
@@ -71,8 +75,9 @@ public class PaymentService {
         List<Payment> listOfPayments = paymentRepo.findByNationalNumber(spouse);
         if (listOfPayments.size() == 0)
             return true;
-        long count = listOfPayments.stream().filter(p -> (p.getLoan() instanceof HousingLoan)).count();
+        Degree degree = student.getUniversityInfo().getDegree();
+        long count = listOfPayments.stream().filter(p -> (p.getLoan() instanceof HousingLoan))
+                .filter(p->(DateUtil.areDatesInSameGrade(p.getPaidDate(),DateUtil.getToday(),degree))).count();
         return count == 0;
-        //todo if spouse has previous housing payments doesn't give payment to student,it doesnt check the date
     }
 }

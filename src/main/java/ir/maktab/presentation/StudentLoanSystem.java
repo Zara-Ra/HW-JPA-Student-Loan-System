@@ -213,7 +213,7 @@ public class StudentLoanSystem {
         int choice;
         Loan loan=null;
         Payment payment = null;
-        boolean hasPayment = true;
+        boolean hasPreviousPayment = true;
         boolean hasConditions = false;
         try {
             choice = Integer.parseInt(scanner.nextLine());
@@ -222,27 +222,27 @@ public class StudentLoanSystem {
                     hasConditions = true;
                     loan = loanService.getEducationLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-                    hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+                    hasPreviousPayment = studentService.hasPreviousLoanPayment(student, payment);
                 }
                 case 2 -> {
                     hasConditions = studentService.checkTuitionLoanConditions(student);
                     if (hasConditions) {
                         loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
                         payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-                        hasPayment = studentService.hasPreviousLoanPayment(student, payment);
+                        hasPreviousPayment = studentService.hasPreviousLoanPayment(student, payment);
                     }
                 }
                 case 3 -> {
                     loan = loanService.getHousingLoan(student.getCity().type);
                     payment = new Payment(student, loan, student.getUniversityInfo().getDegree());
-                    hasPayment = studentService.hasPreviousLoanPayment(student, payment);
-                    if (!hasPayment)
+                    hasPreviousPayment = studentService.hasPreviousLoanPayment(student, payment);
+                    if (!hasPreviousPayment)
                         hasConditions = checkHousingLoanConditions();
                 }
                 default -> throw new NumberFormatException();
             }
 
-            if (!hasPayment && hasConditions) {
+            if (!hasPreviousPayment && hasConditions) {
                 System.out.println(loan);
                 CreditCard creditCard = getCreditCardInfo();
                 payment.setCreditCard(creditCard);
@@ -271,11 +271,11 @@ public class StudentLoanSystem {
             student.setLiveInDorm(false);
         } else
             return false;
-        System.out.println("Enter Your Spouse Information");        //todo what should be compared for spouse
-        System.out.println("Name:");                                //maybe write a query to find person in payment
+        System.out.println("Enter Your Spouse Information");
+        System.out.println("Name:");
         String spouseName = scanner.nextLine();
         Validation.validateName(spouseName);
-        System.out.println("Family Name:");                         //with national code
+        System.out.println("Family Name:");
         String spouseFamily = scanner.nextLine();
         Validation.validateName(spouseFamily);
         System.out.println("National Code:");
@@ -348,10 +348,9 @@ public class StudentLoanSystem {
                 }
                 default -> throw new NumberFormatException();
             }
-        } catch (NumberFormatException e) {
         } catch (ValidationException e) {
             System.err.println(e.getMessage());
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
             System.err.println("Invalid Payment Number");
         } catch (NullPointerException e) {
             System.err.println("You Have Repaid This Loan Completely");
