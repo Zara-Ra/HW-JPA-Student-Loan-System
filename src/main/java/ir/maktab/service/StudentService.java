@@ -4,7 +4,7 @@ import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.user.Student;
 import ir.maktab.data.enums.RepayType;
 import ir.maktab.data.enums.UniversityType;
-import ir.maktab.repository.StudentRepo;
+import ir.maktab.repository.impl.StudentRepo;
 import ir.maktab.util.date.DateUtil;
 
 import java.util.Date;

@@ -6,7 +6,7 @@ import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.enums.CityType;
 import ir.maktab.data.enums.DegreeGroup;
-import ir.maktab.repository.LoanRepo;
+import ir.maktab.repository.impl.LoanRepo;
 
 public class LoanService {
     private static final LoanService loanService = new LoanService();

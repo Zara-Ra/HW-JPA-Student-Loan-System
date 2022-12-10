@@ -1,6 +1,8 @@
-package ir.maktab.repository;
+package ir.maktab.repository.impl;
 
 import ir.maktab.data.entity.user.Student;
+import ir.maktab.repository.EntityManagerFactoryProducer;
+import ir.maktab.repository.IRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -8,7 +10,7 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
-public class StudentRepo {
+public class StudentRepo implements IRepository<Student> {
     private static final StudentRepo studentRepo = new StudentRepo();
 
     private StudentRepo() {
@@ -25,7 +27,7 @@ public class StudentRepo {
             em.persist(student);
             em.getTransaction().commit();
             em.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -54,15 +56,6 @@ public class StudentRepo {
         em.getTransaction().commit();
         em.close();
         return studentList;
-    }
-
-    public Student getById(int id) {
-        EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
-        em.getTransaction().begin();
-        Student person = em.find(Student.class, id);
-        em.getTransaction().commit();
-        em.close();
-        return person;
     }
 
     public Optional<Student> getByUserNameAndPassword(String username, String password) {

@@ -1,15 +1,17 @@
-package ir.maktab.repository;
+package ir.maktab.repository.impl;
 
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.user.Person;
 import ir.maktab.data.entity.user.Student;
+import ir.maktab.repository.EntityManagerFactoryProducer;
+import ir.maktab.repository.IRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-public class PaymentRepo {
+public class PaymentRepo implements IRepository<Payment> {
     private static final PaymentRepo paymentRepo = new PaymentRepo();
 
     private PaymentRepo() {

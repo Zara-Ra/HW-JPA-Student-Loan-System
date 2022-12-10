@@ -24,31 +24,28 @@ public class PaymentServiceTest {
         assertEquals("You Can Not Register For A Loan At This Date (Registration Time is First Week Of Aban And Last Week of Bahman)"
                 , exception.getMessage());
     }
+
     @Order(2)
     @Test
-    void checkRegistrationDateValidTest(){
-        assertDoesNotThrow( () -> paymentService.checkRegistrationDate(DateUtil.getToday()));
+    void checkRegistrationDateValidTest() {
+        assertDoesNotThrow(() -> paymentService.checkRegistrationDate(DateUtil.getToday()));
     }
 
     @Order(3)
     @Test
     void invalidSpouseConditionsTest() {
-        Student student = studentService.signIn("0081790171","aA1@zzzz").get();
-        Person spouse = new Person("Zahra","Rahimi","0080218725");
+        Student student = studentService.signIn("0081790171", "aA1@zzzz").get();
+        Person spouse = new Person("Zahra", "Rahimi", "0080218725");
         boolean hasCondition = paymentService.checkSpouseConditions(student, spouse);
         assertFalse(hasCondition);
     }
+
     @Order(4)
     @Test
     void validSpouseConditionsWithoutAnyPaymentTest() {
-        Student student = studentService.signIn("0081790171","aA1@zzzz").get();
-        Person spouse = new Person("Ala","Hosseini","0442521677");
+        Student student = studentService.signIn("0081790171", "aA1@zzzz").get();
+        Person spouse = new Person("Ala", "Hosseini", "0442521677");
         boolean hasCondition = paymentService.checkSpouseConditions(student, spouse);
         assertTrue(hasCondition);
-    }
-    @Order(5)
-    @Test
-    void validSpouseConditionsTestWithPaymentTest(){
-
     }
 }

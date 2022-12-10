@@ -1,4 +1,4 @@
-package ir.maktab.repository;
+package ir.maktab.repository.impl;
 
 import ir.maktab.data.entity.loans.EducationLoan;
 import ir.maktab.data.entity.loans.HousingLoan;
@@ -6,12 +6,14 @@ import ir.maktab.data.entity.loans.Loan;
 import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.enums.CityType;
 import ir.maktab.data.enums.DegreeGroup;
+import ir.maktab.repository.EntityManagerFactoryProducer;
+import ir.maktab.repository.IRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-public class LoanRepo {
+public class LoanRepo implements IRepository<Loan> {
     private static final LoanRepo loanRepo = new LoanRepo();
 
     private LoanRepo() {
@@ -53,15 +55,6 @@ public class LoanRepo {
         em.getTransaction().commit();
         em.close();
         return loanList;
-    }
-
-    public Loan getById(int id) {
-        EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
-        em.getTransaction().begin();
-        Loan loan = em.find(Loan.class, id);
-        em.getTransaction().commit();
-        em.close();
-        return loan;
     }
 
     public EducationLoan getEducationLoanByDegree(DegreeGroup degree) {

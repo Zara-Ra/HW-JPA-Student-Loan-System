@@ -2,7 +2,7 @@ package ir.maktab.service;
 
 import ir.maktab.data.entity.Payment;
 import ir.maktab.data.entity.Repayment;
-import ir.maktab.repository.RepaymentRepo;
+import ir.maktab.repository.impl.RepaymentRepo;
 
 import java.util.List;
 

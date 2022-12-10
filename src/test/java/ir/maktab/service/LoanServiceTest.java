@@ -7,12 +7,11 @@ import ir.maktab.data.entity.loans.TuitionLoan;
 import ir.maktab.data.enums.CityType;
 import ir.maktab.data.enums.DegreeGroup;
 import ir.maktab.data.enums.RepayType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LoanServiceTest {
@@ -44,5 +43,27 @@ class LoanServiceTest {
     @Order(1)
     void addLoan(Loan loan) {
         loanService.addLoan(loan);
+    }
+
+    @Order(2)
+    @Test
+    void getEducationLoanTest(){
+        assertEquals(loans[0],loanService.getEducationLoan(DegreeGroup.GROUP1));
+        assertEquals(loans[1],loanService.getEducationLoan(DegreeGroup.GROUP2));
+        assertEquals(loans[2],loanService.getEducationLoan(DegreeGroup.GROUP3));
+    }
+    @Order(3)
+    @Test
+    void getTuitionLoanTest(){
+        assertEquals(loans[6],loanService.getTuitionLoan(DegreeGroup.GROUP1));
+        assertEquals(loans[7],loanService.getTuitionLoan(DegreeGroup.GROUP2));
+        assertEquals(loans[8],loanService.getTuitionLoan(DegreeGroup.GROUP3));
+    }
+    @Order(4)
+    @Test
+    void getHousingLoanTest(){
+        assertEquals(loans[3],loanService.getHousingLoan(CityType.CAPITAL));
+        assertEquals(loans[4],loanService.getHousingLoan(CityType.METROPOLIS));
+        assertEquals(loans[5],loanService.getHousingLoan(CityType.OTHER));
     }
 }
