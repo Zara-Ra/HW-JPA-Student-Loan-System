@@ -15,7 +15,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-public class Person {   //personal info
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -27,10 +27,10 @@ public class Person {   //personal info
     String mothersName;
     @Column(nullable = false)
     String fathersName;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     String birthCertificateNum;
     @Column(nullable = false, unique = true)
-    String nationalNum;
+    String nationalCode;
     @Column(nullable = false)
     @Temporal(value = TemporalType.DATE)
     Date birthdate;
@@ -44,11 +44,11 @@ public class Person {   //personal info
     City city;
     @EqualsAndHashCode.Exclude
     String houseContractNum;
-
-    public Person(String name, String familyName, String nationalNum) {
+    //Person spouse;
+    public Person(String name, String familyName, String nationalCode) {
         this.name = name;
         this.familyName = familyName;
-        this.nationalNum = nationalNum;
+        this.nationalCode = nationalCode;
     }
 }
 

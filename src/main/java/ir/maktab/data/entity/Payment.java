@@ -32,7 +32,7 @@ public class Payment {
 
     @EqualsAndHashCode.Exclude
     @Temporal(value = TemporalType.TIMESTAMP)
-    //@CreationTimestamp
+    //@CreationTimestamp --> this filed should actually be timestamp but for testing issues it is set manually
     Date paidDate;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -53,6 +53,9 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "***Payment: " + student.getName() + " " + student.getFamilyName() + " " + loan.getClass().getSimpleName() + "***";
+        return "***Payment: "
+                + student.getName() + " "
+                + student.getFamilyName() + " "
+                + loan.getClass().getSimpleName() + "***";
     }
 }

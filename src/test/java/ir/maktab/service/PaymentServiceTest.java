@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ir.maktab.presentation.StudentLoanSystem.studentService;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PaymentServiceTest {
     private static final PaymentService paymentService = PaymentService.getInstance();
-    private static final StudentService studentService = StudentService.getInstance();
 
     @Order(1)
     @Test

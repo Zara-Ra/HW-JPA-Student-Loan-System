@@ -71,10 +71,10 @@ public class PaymentRepo implements IRepository<Payment> {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("FROM Payment p where p.student.name=:name and p.student.familyName=:family " +
-                "and p.student.nationalNum=:nationalNum");
+                "and p.student.nationalCode=:nationalNum");
         query.setParameter("name", person.getName());
         query.setParameter("family", person.getFamilyName());
-        query.setParameter("nationalNum", person.getNationalNum());
+        query.setParameter("nationalNum", person.getNationalCode());
         List<Payment> paymentList = query.getResultList();
         em.getTransaction().commit();
         em.close();
