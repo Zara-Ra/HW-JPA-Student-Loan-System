@@ -52,7 +52,7 @@ public class StudentRepo implements IRepository<Student> {
     public List<Student> getAll() {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        List<Student> studentList = em.createQuery("FROM Student ").getResultList();
+        List<Student> studentList = em.createNamedQuery("getAllStudents").getResultList();
         em.getTransaction().commit();
         em.close();
         return studentList;

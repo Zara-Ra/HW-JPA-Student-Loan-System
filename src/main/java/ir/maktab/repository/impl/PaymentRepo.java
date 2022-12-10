@@ -49,7 +49,7 @@ public class PaymentRepo implements IRepository<Payment> {
     public List<Payment> getAll() {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        List<Payment> paymentList = em.createQuery("FROM Payment ").getResultList();
+        List<Payment> paymentList = em.createNamedQuery("getAllPayments").getResultList();
         em.getTransaction().commit();
         em.close();
         return paymentList;

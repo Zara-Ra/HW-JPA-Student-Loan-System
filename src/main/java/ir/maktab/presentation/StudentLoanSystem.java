@@ -20,7 +20,6 @@ import ir.maktab.util.exceptions.GraduationException;
 import ir.maktab.util.exceptions.NotInDateRangeException;
 import ir.maktab.util.exceptions.ValidationException;
 import ir.maktab.util.validation.Validation;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,8 +67,7 @@ public class StudentLoanSystem {
                 }
                 default -> exit(0);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             firstMenu();
         }
@@ -211,7 +209,7 @@ public class StudentLoanSystem {
         System.out.println("Press Any Key --> Back");
         System.out.println(DIVIDER);
         int choice;
-        Loan loan=null;
+        Loan loan = null;
         Payment payment = null;
         boolean hasPreviousPayment = true;
         boolean hasConditions = false;

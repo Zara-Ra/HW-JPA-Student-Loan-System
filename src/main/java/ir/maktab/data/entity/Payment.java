@@ -19,6 +19,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @IdClass(PaymentId.class)
+@NamedQueries(
+        @NamedQuery(name = "getAllPayments",query = "FROM Payment")
+)
 public class Payment {
     @Id
     @ManyToOne

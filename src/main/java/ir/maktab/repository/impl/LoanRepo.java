@@ -51,7 +51,7 @@ public class LoanRepo implements IRepository<Loan> {
     public List<Loan> getAll() {
         EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
         em.getTransaction().begin();
-        List<Loan> loanList = em.createQuery("FROM Loan ").getResultList();
+        List<Loan> loanList = em.createNamedQuery("getAllLoan").getResultList();
         em.getTransaction().commit();
         em.close();
         return loanList;

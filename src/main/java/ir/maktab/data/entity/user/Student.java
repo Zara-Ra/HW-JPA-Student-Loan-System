@@ -4,7 +4,6 @@ import ir.maktab.data.entity.Payment;
 import ir.maktab.data.enums.City;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +18,9 @@ import java.util.List;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@NamedQueries(
+        @NamedQuery(name = "getAllStudents",query = "FROM Student")
+)
 public class Student extends Person implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     AccountInfo accountInfo;

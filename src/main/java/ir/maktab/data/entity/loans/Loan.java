@@ -4,7 +4,6 @@ import ir.maktab.data.entity.Payment;
 import ir.maktab.data.enums.RepayType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +20,9 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "loan_type", discriminatorType = DiscriminatorType.STRING)
 @Entity
+@NamedQueries(
+        @NamedQuery(name = "getAllLoan",query = "FROM Loan ")
+)
 public class Loan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

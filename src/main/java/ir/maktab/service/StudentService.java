@@ -30,9 +30,11 @@ public class StudentService {
     public Optional<Student> signIn(String username, String password) {
         return studentRepo.getByUserNameAndPassword(username, password);
     }
+
     public boolean checkTuitionLoanConditions(Student student) {
         return !(student.getUniversityInfo().getUniversityType() == UniversityType.PUBLIC_DAILY);
     }
+
     public boolean hasPreviousLoanPayment(Student student, Payment payment) {
         int i = student.getPaymentList().indexOf(payment);
         boolean flag = false;

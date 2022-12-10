@@ -10,7 +10,7 @@ public enum City {
     QOM(CityType.METROPOLIS),
     MASHHAD(CityType.METROPOLIS),
     KARAJ(CityType.METROPOLIS),
-    OTHER( CityType.OTHER);
+    OTHER(CityType.OTHER);
 
     public final CityType type;
 
