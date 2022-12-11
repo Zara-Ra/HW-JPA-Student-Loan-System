@@ -60,13 +60,11 @@ public class PaymentService {
         double numberOfMonths = MONTHS_OF_YEAR;
         double sum = numberOfMonths;
         for (int i = 1; i < repayYears; i++) {
-            double temp = numberOfMonths * annualIncrease;
-            numberOfMonths += temp;
+            numberOfMonths *= 1 + annualIncrease;
             sum += numberOfMonths;
         }
         return totalRepay / sum;
     }
-
     public void checkRegistrationDate(Date date) {
         if (!DateUtil.isInRegistrationRange(date))
             throw new NotInDateRangeException("You Can Not Register For A Loan At This Date (Registration Time is First Week " +

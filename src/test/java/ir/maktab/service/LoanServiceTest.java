@@ -34,10 +34,6 @@ class LoanServiceTest {
         return loans;
     }
 
-    @BeforeAll
-    static void setUp() {
-    }
-
     @ParameterizedTest
     @MethodSource(value = "loanData")
     @Order(1)

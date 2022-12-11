@@ -9,10 +9,7 @@ import ir.maktab.data.enums.City;
 import ir.maktab.data.enums.Degree;
 import ir.maktab.data.enums.UniversityType;
 import ir.maktab.util.date.DateUtil;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -27,9 +24,9 @@ public class StudentServiceTest {
     private static final StudentService studentService = StudentService.getInstance();
     private static Student student;
 
-    @Order(1)
-    @Test
-    public void signUpTest() {
+
+    @BeforeAll
+    public static void setUpMockStudent() {
         AccountInfo accountInfo = new AccountInfo(null, "0080218725", "aA1@zzzz");
 
         LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
@@ -48,63 +45,21 @@ public class StudentServiceTest {
         studentService.singUp(student);
     }
 
-    @Order(2)
+    @Order(1)
     @Test
     public void invalidUsernameSignInTest() {
         Optional<Student> optionalStudent = studentService.signIn("12345678", "aA1@zzzz");
         assertFalse(optionalStudent.isPresent());
     }
 
-    @Order(3)
+    @Order(2)
     @Test
     public void invalidPasswordSignInTest() {
         Optional<Student> optionalStudent = studentService.signIn("0080218725", "aaaaaaaa");
         assertFalse(optionalStudent.isPresent());
     }
 
-    @Order(4)
-    @Test
-    public void signUpTestSpouse() {
-        AccountInfo accountInfo = new AccountInfo(null, "0081790171", "aA1@zzzz");
-
-        LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
-        Date entry = DateUtil.localDateTimeToDate(localDate1);
-
-        UniversityInfo universityInfo = new UniversityInfo(null, "810185195", "Sharif University"
-                , UniversityType.CAMPUS, entry, Degree.DISCONTINUOUS_MASTER);
-
-        LocalDateTime localDate = LocalDateTime.of(1987, 9, 29, 0, 0);
-        Date birth = DateUtil.localDateTimeToDate(localDate);
-
-        Student spouse = new Student(null, "Mohammad", "Hosseini", "Maryam", "Mohsen"
-                , "12345", "0081790171", birth, false, false, City.RASHT
-                , null, accountInfo, universityInfo);
-
-        studentService.singUp(spouse);
-    }
-
-    @Order(5)
-    @Test
-    public void signUpTestSpouseWithoutAnyPayment() {
-        AccountInfo accountInfo = new AccountInfo(null, "0441967205", "aA1@zzzz");
-
-        LocalDateTime localDate1 = LocalDateTime.of(2021, 2, 26, 0, 0);
-        Date entry = DateUtil.localDateTimeToDate(localDate1);
-
-        UniversityInfo universityInfo = new UniversityInfo(null, "810185199", "Sharif University"
-                , UniversityType.CAMPUS, entry, Degree.DISCONTINUOUS_MASTER);
-
-        LocalDateTime localDate = LocalDateTime.of(2000, 9, 29, 0, 0);
-        Date birth = DateUtil.localDateTimeToDate(localDate);
-
-        Student spouse = new Student(null, "Ala", "Hosseini", "Zahra", "Esmaeil"
-                , "12346", "0442521677", birth, false, false, City.OTHER
-                , null, accountInfo, universityInfo);
-
-        studentService.singUp(spouse);
-    }
-
-    @Order(6)
+    @Order(3)
     @Test
     public void isGraduatedTest() {
         LocalDateTime localDate1 = LocalDateTime.of(2000, 2, 26, 0, 0);
@@ -123,7 +78,7 @@ public class StudentServiceTest {
         assertTrue(studentService.isGraduated(student));
     }
 
-    @Order(7)
+    @Order(4)
     @Test
     public void isNotGraduatedTest() {
         LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
@@ -142,7 +97,7 @@ public class StudentServiceTest {
         assertFalse(studentService.isGraduated(student));
     }
 
-    @Order(8)
+    @Order(5)
     @Test
     public void signInTest() {
         Optional<Student> optionalStudent = studentService.signIn("0080218725", "aA1@zzzz");
@@ -150,7 +105,7 @@ public class StudentServiceTest {
         assertTrue(optionalStudent.isPresent());
     }
 
-    @Order(9)
+    @Order(6)
     @Test
     public void hasPreviousLoanPaymentForTuitionLoanTest() {
         Loan loan = loanService.getTuitionLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
@@ -160,7 +115,7 @@ public class StudentServiceTest {
         assertTrue(studentService.hasPreviousLoanPayment(student, payment));
     }
 
-    @Order(10)
+    @Order(7)
     @Test
     public void hasPreviousLoanPaymentForEducationLoanTest() {
         Loan loan = loanService.getEducationLoan(student.getUniversityInfo().getDegree().toDegreeGroup());
@@ -170,7 +125,7 @@ public class StudentServiceTest {
         assertTrue(studentService.hasPreviousLoanPayment(student, payment));
     }
 
-    @Order(11)
+    @Order(8)
     @Test
     public void hasPreviousLoanPaymentForHousingLoanTest() {
         Loan loan = loanService.getHousingLoan(student.getCity().type);
@@ -180,7 +135,7 @@ public class StudentServiceTest {
         assertTrue(studentService.hasPreviousLoanPayment(student, payment));
     }
 
-    @Order(12)
+    @Order(9)
     @Test
     public void InvalidTuitionLoanConditions() {
         LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
@@ -200,7 +155,7 @@ public class StudentServiceTest {
     }
 
 
-    @Order(13)
+    @Order(10)
     @Test
     public void validTuitionLoanConditions() {
         LocalDateTime localDate1 = LocalDateTime.of(2022, 2, 26, 0, 0);
@@ -219,7 +174,7 @@ public class StudentServiceTest {
         assertTrue(studentService.checkTuitionLoanConditions(student));
     }
 
-    @Order(14)
+    @Order(11)
     @Test
     public void calculateGraduationDateForPHDTest(){
         LocalDateTime entry = LocalDateTime.of(2022, 1, 1, 0, 0);
