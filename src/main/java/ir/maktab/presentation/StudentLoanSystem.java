@@ -141,7 +141,7 @@ public class StudentLoanSystem {
             String uniName = scanner.nextLine();
             Validation.validateName(uniName);
 
-            System.out.println("University Type: ");
+            System.out.println("University Type: ");// explain how to get the input
             String uniType = scanner.nextLine();
             UniversityType universityType = UniversityType.valueOf(uniType);
 
@@ -259,7 +259,7 @@ public class StudentLoanSystem {
     private boolean checkHousingLoanConditions() {
         System.out.println("Are You Married?(Y/N)");
         String yesNo = scanner.nextLine();
-        if (yesNo.equals("Y") || yesNo.equals("y")) {
+        if (yesNo.equals("Y") || yesNo.equals("y")) {//equals ignore case instead
             student.setMarried(true);
         } else
             return false;

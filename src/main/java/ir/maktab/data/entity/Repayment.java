@@ -16,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Cacheable
+@Cacheable                                          //second level cache i dont see any effect!
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NamedQueries(
         @NamedQuery(name = "getAllRepayments",query = "FROM Repayment")

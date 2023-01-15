@@ -154,7 +154,6 @@ public class StudentServiceTest {
         assertFalse(studentService.checkTuitionLoanConditions(student));
     }
 
-
     @Order(10)
     @Test
     public void validTuitionLoanConditions() {

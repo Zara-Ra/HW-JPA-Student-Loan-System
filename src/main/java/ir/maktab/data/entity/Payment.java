@@ -22,7 +22,7 @@ import java.util.List;
 @NamedQueries(
         @NamedQuery(name = "getAllPayments",query = "FROM Payment")
 )
-public class Payment {
+public class Payment {//وام تخصیص داده شده پرداختallocated loan
     @Id
     @ManyToOne
     Student student;

@@ -15,7 +15,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class UniversityInfo {
+public class UniversityInfo {//this entity should be inside Student not an additional entity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

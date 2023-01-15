@@ -28,7 +28,7 @@ public class StudentRepo implements IRepository<Student> {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println(e.getMessage());//throw exception instead of printing an error here!
         }
     }
 
@@ -63,7 +63,8 @@ public class StudentRepo implements IRepository<Student> {
         try {
             EntityManager em = EntityManagerFactoryProducer.emf.createEntityManager();
             em.getTransaction().begin();
-            Query query = em.createQuery("from Student s where s.accountInfo.username =:username and s.accountInfo.password =:password");
+            Query query = em.createQuery("from Student s where s.accountInfo.username =:username " +
+                    "and s.accountInfo.password =:password");
             query.setParameter("username", username);
             query.setParameter("password", password);
             person = (Student) query.getSingleResult();

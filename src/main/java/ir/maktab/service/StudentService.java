@@ -54,6 +54,7 @@ public class StudentService {
     }
 
     public boolean isGraduated(Student student) {
+        //compare to Date
         return DateUtil.compare(calculateGraduationDate(student), DateUtil.getToday()) <= 0;
     }
 

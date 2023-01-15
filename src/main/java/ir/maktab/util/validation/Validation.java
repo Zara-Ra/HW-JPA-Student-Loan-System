@@ -48,7 +48,7 @@ public class Validation {
     }
 
     public static void validatePassword(String pass) {
-        validate.accept(pass, "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).{8}$",
+        validate.accept(pass, "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).{8,}$",
                 "Invalid Password( 8 characters,contain at least one uppercase,one lowercase,one digit,one special character @#$%& )");
     }
 

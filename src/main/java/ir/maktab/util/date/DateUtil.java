@@ -1,13 +1,14 @@
 package ir.maktab.util.date;
 
 import ir.maktab.data.enums.Degree;
+import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-
+@UtilityClass // no need to add static keyword
 public class DateUtil {
     private static final Date ASSUMED_TODAY_1 = DateUtil.localDateTimeToDate(LocalDateTime.of(2022, 10, 25, 0, 0));
     private static final Date ASSUMED_TODAY_2 = DateUtil.localDateTimeToDate(LocalDateTime.of(2023, 2, 15, 0, 0));
