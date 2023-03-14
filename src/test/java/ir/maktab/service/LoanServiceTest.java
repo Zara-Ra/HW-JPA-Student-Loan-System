@@ -17,9 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LoanServiceTest {
 
     private static final Loan[] loans = new Loan[9];
+
     private static final LoanService loanService = LoanService.getInstance();
 
-    public static Loan[] loanData() {//these data should be entered in main not in test!
+
+    public static Loan[] loanData() {
+
+        //these data should be entered in main not in test!
         loans[0] = new EducationLoan(RepayType.EACH_SEMESTER, 1900000d, DegreeGroup.GROUP1);
         loans[1] = new EducationLoan(RepayType.EACH_SEMESTER, 2250000d, DegreeGroup.GROUP2);
         loans[2] = new EducationLoan(RepayType.EACH_SEMESTER, 2600000d, DegreeGroup.GROUP3);

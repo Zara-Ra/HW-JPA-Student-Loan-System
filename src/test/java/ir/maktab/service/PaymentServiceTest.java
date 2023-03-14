@@ -82,6 +82,7 @@ public class PaymentServiceTest {
     void invalidcheckRegistrationDateTest() {
         NotInDateRangeException exception = assertThrows(NotInDateRangeException.class
                 , () -> paymentService.checkRegistrationDate(DateUtil.TODAY_DATE));
+
         assertEquals("You Can Not Register For A Loan At This Date (Registration Time is First Week Of Aban And Last Week of Bahman)"
                 , exception.getMessage());
     }
